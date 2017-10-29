@@ -1,6 +1,6 @@
 {
   "name": "markdown-log",
-  "version": "1.0.0_0",
+  "version": "1.0.0",
   "description": "Markdown Log Tracker",
   "main": "commands/mlog.js",
   "scripts": {
@@ -14,7 +14,8 @@
     "nyc": "nyc",
     "preversion": "npm run lint && npm test",
     "version": "git add commands db utils",
-    "postversion": "git push && git push --tags"
+    "postversion": "git push && git push --tags",
+    "mlog": "node -r babel-register commands/mlog.js"
   },
   "author": {
     "name": "Jonathan Keller",
@@ -33,6 +34,7 @@
     "coveralls": "^3.0.0",
     "date-fns": "^1.29.0",
     "debug": "^3.1.0",
+    "minimist": "^1.2.0",
     "sprintf-js": "^1.1.1"
   },
   "devDependencies": {
