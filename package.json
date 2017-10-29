@@ -1,0 +1,87 @@
+{
+  "name": "markdown-log",
+  "version": "1.0.0_0",
+  "description": "Markdown Log Tracker",
+  "main": "commands/mlog.js",
+  "scripts": {
+    "lint": "eslint commands utils db --ext .js",
+    "test": "nyc mocha --compilers js:babel-core/register --reporter spec test/**/*.test.js",
+    "coveralls": "nyc report --reporter=text-lcov | coveralls",
+    "test:mocha": "mocha --compilers js:babel-core/register --reporter spec test/**/*.test.js",
+    "test:watch": "mocha --compilers js:babel-core/register --reporter spec test/**/*.test.js --watch",
+    "mocha": "mocha --compilers js:babel-core/register",
+    "eslint": "eslint",
+    "nyc": "nyc",
+    "preversion": "npm run lint && npm test",
+    "version": "git add commands db utils",
+    "postversion": "git push && git push --tags"
+  },
+  "author": {
+    "name": "Jonathan Keller",
+    "email": "keller.jonathan@gmail.com"
+  },
+  "license": "GPL-3.0+",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kellerj/mlog.git"
+  },
+  "bin": {
+    "mlog": "./commands/mlog.js"
+  },
+  "dependencies": {
+    "chalk": "2.1.x",
+    "coveralls": "2.13.x",
+    "date-fns": "^1.28.5",
+    "debug": "3.0.x",
+    "sprintf-js": "1.1.x"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-es2017": "^6.24.1",
+    "babel-register": "^6.26.0",
+    "chai": "^4.1.1",
+    "eslint": "^4.5.x",
+    "eslint-config-airbnb": "^15.1.x",
+    "eslint-plugin-import": "^2.7.x",
+    "eslint-plugin-jsx-a11y": "5.1.1",
+    "eslint-plugin-react": "^7.3.x",
+    "istanbul": "^0.4.5",
+    "mocha": "^3.5.0",
+    "nyc": "^11.1.0",
+    "sinon": "^3.2.1"
+  },
+  "nyc": {
+    "check-coverage": false,
+    "lines": 90,
+    "statements": 90,
+    "functions": 100,
+    "branches": 75,
+    "reporter": [
+      "lcov",
+      "text-summary",
+      "text",
+      "html"
+    ],
+    "watermarks": {
+      "lines": [
+        75,
+        90
+      ],
+      "functions": [
+        90,
+        100
+      ],
+      "branches": [
+        50,
+        75
+      ],
+      "statements": [
+        75,
+        90
+      ]
+    },
+    "cache": true,
+    "all": true,
+    "report-dir": "./coverage"
+  }
+}
