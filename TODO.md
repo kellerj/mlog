@@ -44,6 +44,7 @@
         "Weekly Summary"
     ],
     "defaultCategory" : "Work Log",
-    "fileNameFormat" : "YYYY-MM-DD"
+    "fileNameFormat" : "YYYY-MM-DD",
+    "title" : "Logbook"
 }
 ```
