@@ -7,6 +7,11 @@ const LOG = debug('lib:config');
 
 export function prepareDirectory(logLocation) {
   // Check that given location exists (or can be created) and is writable
+
+  if (!logLocation || logLocation === '/') {
+    throw new Error('Blank or root path specified for log location');
+  }
+
   if (fs.existsSync(logLocation)) {
     if (!fs.statSync(logLocation).isDirectory()) {
       throw new Error(`${logLocation} already exists and is not a directory.`);
@@ -16,6 +21,9 @@ export function prepareDirectory(logLocation) {
     LOG(`Path does not exist, checking existence of ${parentDir}`);
     if (!fs.existsSync(parentDir)) {
       throw new Error(`Parent Directory ${parentDir} does not exist.`);
+    }
+    if (!fs.statSync(parentDir).isDirectory()) {
+      throw new Error(`Parent of log location ${parentDir} is not a directory.`);
     }
     try {
       // eslint-disable-next-line no-bitwise
