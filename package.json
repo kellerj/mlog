@@ -15,7 +15,8 @@
     "preversion": "npm run lint && npm test",
     "version": "git add commands db utils",
     "postversion": "git push && git push --tags",
-    "mlog": "DEBUG=*,-babel node -r babel-register commands/mlog.js"
+    "mlog": "DEBUG=*,-babel node -r babel-register commands/mlog.js",
+    "mlog-init": "DEBUG=*,-babel node -r babel-register commands/mlog-init.js"
   },
   "author": {
     "name": "Jonathan Keller",

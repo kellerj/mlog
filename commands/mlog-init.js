@@ -11,10 +11,12 @@ commander.version('1.0.0')
   .usage('mlog init <path>')
   .parse(process.argv);
 
+LOG('*****\nCOMMAND INPUT:\n*****');
 LOG(commander);
 
 const logLocation = commander.args[0];
 
+// Check that given location exists (or can be created) and is writable
 if (fs.existsSync(logLocation)) {
   if (!fs.statSync(logLocation).isDirectory()) {
     throw new Error(`${logLocation} already exists and is not a directory.`);
@@ -34,22 +36,23 @@ if (fs.existsSync(logLocation)) {
   fs.mkdirSync(logLocation);
 }
 
-const configFileLocation = `${os.homedir()}/.mlog-config`;
+// Create the home directory config file to keep track of where the logbook is
+const configFileLocation = path.format({ dir: os.homedir(), base: '.mlog-config.json' });
 const config = { mlogLocation: logLocation };
-
 fs.writeFileSync(configFileLocation, JSON.stringify(config, null, 2));
 
-// TODO: check if path exists
-// TODO: create path if does not exist (parent must already exist)
-// TODO: check for config file in target location
-// TODO: Create default config file
-
-const defaultConfig = {
-  categories: [
-    'Work Log',
-    'Weekly Summary',
-  ],
-  defaultCategory: 'Work Log',
-  fileNameFormat: 'YYYY-MM-DD',
-  title: 'Logbook',
-};
+// check for config file in target location and create if not there
+const logbookConfigFile = path.format({ dir: logLocation, base: 'logbook-config.json' });
+if (!fs.existsSync(logbookConfigFile)) {
+  // Create default config file
+  const defaultConfig = {
+    categories: [
+      'Work Log',
+      'Weekly Summary',
+    ],
+    defaultCategory: 'Work Log',
+    fileNameFormat: 'YYYY-MM-DD',
+    title: 'Logbook',
+  };
+  fs.writeFileSync(logbookConfigFile, JSON.stringify(defaultConfig, null, 2));
+}
