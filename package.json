@@ -4,7 +4,7 @@
   "description": "Markdown Log Tracker",
   "main": "commands/mlog.js",
   "scripts": {
-    "lint": "eslint commands utils db --ext .js",
+    "lint": "eslint src --ext .js",
     "test": "nyc mocha --compilers js:babel-core/register --reporter spec test/**/*.test.js",
     "coveralls": "nyc report --reporter=text-lcov | coveralls",
     "test:mocha": "mocha --compilers js:babel-core/register --reporter spec test/**/*.test.js",
@@ -13,10 +13,10 @@
     "eslint": "eslint",
     "nyc": "nyc",
     "preversion": "npm run lint && npm test",
-    "version": "git add commands db utils",
+    "version": "git add src",
     "postversion": "git push && git push --tags",
-    "mlog": "DEBUG=*,-babel node -r babel-register commands/mlog.js",
-    "mlog-init": "DEBUG=*,-babel node -r babel-register commands/mlog-init.js"
+    "mlog": "DEBUG=*,-babel node -r babel-register src/commands/mlog.js",
+    "mlog-init": "DEBUG=*,-babel node -r babel-register src/commands/mlog-init.js"
   },
   "author": {
     "name": "Jonathan Keller",
@@ -28,7 +28,7 @@
     "url": "https://github.com/kellerj/mlog.git"
   },
   "bin": {
-    "mlog": "./commands/mlog.js"
+    "mlog": "./src/commands/mlog.js"
   },
   "dependencies": {
     "chalk": "^2.3.0",
