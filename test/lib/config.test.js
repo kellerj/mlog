@@ -73,6 +73,14 @@ describe('lib/config', () => {
       expect(config.prepareDirectory.bind(config, logbookPath)).to.throw(`${logbookPath} already exists and is not a directory.`);
     });
 
+    it('should not fail if the path already exists', () => {
+      const logbookPath = path.format({ dir: parentDir, base: 'logbook' });
+      fs.mkdirSync(parentDir);
+      fs.mkdirSync(logbookPath);
+
+      config.prepareDirectory(logbookPath);
+    });
+
     it('should abort if the parent of the path given exists and is not a directory', () => {
       const logbookPath = path.format({ dir: parentDir, base: 'logbook' });
 
