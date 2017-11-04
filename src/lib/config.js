@@ -30,6 +30,7 @@ export function prepareDirectory(logLocation) {
 export function writeHomeConfig(logLocation) {
   // Create the home directory config file to keep track of where the logbook is
   const configFileLocation = path.format({ dir: os.homedir(), base: '.mlog-config.json' });
+  LOG(`Creating File: ${configFileLocation}`);
   const config = { mlogLocation: logLocation };
   fs.writeFileSync(configFileLocation, JSON.stringify(config, null, 2));
 }

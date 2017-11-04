@@ -5,11 +5,11 @@
   "main": "commands/mlog.js",
   "scripts": {
     "lint": "eslint src --ext .js",
-    "test": "nyc mocha --compilers js:babel-core/register --reporter spec test/**/*.test.js",
+    "test": "nyc mocha --require babel-register --reporter spec test/**/*.test.js",
     "coveralls": "nyc report --reporter=text-lcov | coveralls",
-    "test:mocha": "mocha --compilers js:babel-core/register --reporter spec test/**/*.test.js",
-    "test:watch": "mocha --compilers js:babel-core/register --reporter spec test/**/*.test.js --watch",
-    "mocha": "mocha --compilers js:babel-core/register",
+    "test:mocha": "mocha --require babel-register --reporter spec test/**/*.test.js",
+    "test:watch": "mocha --require babel-register --reporter spec test/**/*.test.js --watch",
+    "mocha": "mocha --require babel-register",
     "eslint": "eslint",
     "nyc": "nyc",
     "preversion": "npm run lint && npm test",
@@ -52,7 +52,8 @@
     "istanbul": "^0.4.5",
     "mocha": "^4.0.1",
     "nyc": "^11.2.1",
-    "sinon": "^4.0.2"
+    "sinon": "^4.0.2",
+    "tmp": "^0.0.33"
   },
   "nyc": {
     "check-coverage": false,
