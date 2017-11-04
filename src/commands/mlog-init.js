@@ -15,6 +15,8 @@ LOG(commander);
 
 const logLocation = commander.args[0];
 
+// TODO: handle missing path
+
 try {
   config.prepareDirectory(logLocation);
   config.writeHomeConfig(logLocation);
