@@ -3,6 +3,8 @@ import fs from 'fs';
 import os from 'os';
 import path from 'path';
 
+import defaultConfig from './default-config';
+
 const LOG = debug('lib:config');
 
 export function prepareDirectory(logLocation) {
@@ -42,16 +44,6 @@ export function writeHomeConfig(logLocation) {
   const config = { mlogLocation: logLocation };
   fs.writeFileSync(configFileLocation, JSON.stringify(config, null, 2));
 }
-
-const defaultConfig = {
-  categories: [
-    'Work Log',
-    'Weekly Summary',
-  ],
-  defaultCategory: 'Work Log',
-  fileNameFormat: 'YYYY-MM-DD',
-  title: 'Logbook',
-};
 
 export function prepareLogbookConfig(logLocation) {
   // check for config file in target location and create if not there

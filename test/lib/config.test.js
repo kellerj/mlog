@@ -6,7 +6,7 @@ import tmp from 'tmp';
 import path from 'path';
 
 import * as config from '../../src/lib/config';
-// const assert = require('chai').assert;
+import defaultConfig from '../../src/lib/default-config';
 
 describe('lib/config', () => {
   let tempDir = { name: path.format({ dir: process.cwd(), base: 'temp' }) };
@@ -94,15 +94,34 @@ describe('lib/config', () => {
       expect(fs.existsSync(logbookPath)).to.equal(true);
     });
   });
+
   describe('prepareLogbookConfig', () => {
-    // it('should create a logbook-config.json file', () => {
-    //
-    // });
-    // it('the logbook-config.json file should contain the default configuration settings', () => {
-    //
-    // });
-    // it('should not replace the config file if one already exists', () => {
-    //
-    // });
+    it('should create a logbook-config.json file', () => {
+      const logbookPath = path.format({ dir: parentDir, base: 'logbook' });
+      const configFileName = path.format({ dir: logbookPath, base: 'logbook-config.json' });
+      fs.mkdirSync(parentDir);
+      fs.mkdirSync(logbookPath);
+      config.prepareLogbookConfig(logbookPath);
+      expect(fs.existsSync(configFileName)).to.equal(true);
+    });
+
+    it('the logbook-config.json file should contain the default configuration settings', () => {
+      const logbookPath = path.format({ dir: parentDir, base: 'logbook' });
+      const configFileName = path.format({ dir: logbookPath, base: 'logbook-config.json' });
+      fs.mkdirSync(parentDir);
+      fs.mkdirSync(logbookPath);
+      config.prepareLogbookConfig(logbookPath);
+      expect(JSON.parse(fs.readFileSync(configFileName, 'utf8'))).to.deep.equal(defaultConfig);
+    });
+
+    it('should not replace the config file if one already exists', () => {
+      const logbookPath = path.format({ dir: parentDir, base: 'logbook' });
+      const configFileName = path.format({ dir: logbookPath, base: 'logbook-config.json' });
+      fs.mkdirSync(parentDir);
+      fs.mkdirSync(logbookPath);
+      fs.writeFileSync(configFileName, 'JUST SOME JUNK DATA', 'utf8');
+      config.prepareLogbookConfig(logbookPath);
+      expect(fs.readFileSync(configFileName, 'utf8')).to.equal('JUST SOME JUNK DATA');
+    });
   });
 });
