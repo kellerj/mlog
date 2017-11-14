@@ -24,5 +24,5 @@ try {
   console.log(chalk.green(`${logLocation} Initialized`));
 } catch (e) {
   console.log(chalk.red(e.message));
-  process.exit(1);
+  process.exitCode = 1;
 }

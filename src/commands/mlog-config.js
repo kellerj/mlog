@@ -38,3 +38,4 @@ LOG(commander);
 // TODO: update config as specified
 // TODO: write file
 // TODO: if category list added to, rebuild the master index
+// TODO: when udpating config, update the global object as well (delete and getConfig)
