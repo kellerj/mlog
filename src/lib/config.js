@@ -5,7 +5,11 @@ import path from 'path';
 
 import defaultConfig from './default-config';
 
-const LOG = debug('lib:config');
+const LOG = debug('mlog:lib:config');
+
+function getConfigFileLocation() {
+  return path.format({ dir: os.homedir(), base: '.mlog-config.json' });
+}
 
 export function prepareDirectory(logLocation) {
   // Check that given location exists (or can be created) and is writable
@@ -39,10 +43,11 @@ export function prepareDirectory(logLocation) {
 
 export function writeHomeConfig(logLocation) {
   // Create the home directory config file to keep track of where the logbook is
-  const configFileLocation = path.format({ dir: os.homedir(), base: '.mlog-config.json' });
+  const configFileLocation = getConfigFileLocation();
   LOG(`Creating File: ${configFileLocation}`);
   const config = { mlogLocation: logLocation };
   fs.writeFileSync(configFileLocation, JSON.stringify(config, null, 2));
+  return configFileLocation;
 }
 
 export function prepareLogbookConfig(logLocation) {
@@ -52,4 +57,39 @@ export function prepareLogbookConfig(logLocation) {
     // Create default config file
     fs.writeFileSync(logbookConfigFile, JSON.stringify(defaultConfig, null, 2));
   }
+  return logbookConfigFile;
+}
+
+export function getConfig() {
+  // check if the global config has been loaded, and return that if present
+  if (global.logbookConfig) {
+    return global.logbookConfig;
+  }
+  // read the home config File
+  const configFileLocation = getConfigFileLocation();
+  LOG(`Using base config file: ${configFileLocation}`);
+  try {
+    fs.accessSync(configFileLocation, fs.constants.R_OK);
+  } catch (e) {
+    throw new Error('Missing ~/.mlog-config.json file.  Please run mlog init to configure the logbook location before running any other commands.');
+  }
+  const homeConfig = JSON.parse(fs.readFileSync(configFileLocation, 'utf8'));
+  // LOG('Read home config: %s', homeConfig);
+  LOG('mlogLocation: %s', homeConfig.mlogLocation);
+  const logbookConfigFile = path.join(homeConfig.mlogLocation, 'logbook-config.json');
+  LOG('Using logbook config: %s', logbookConfigFile);
+  // throw Error if file does not exist or unable to read file
+  try {
+    fs.accessSync(logbookConfigFile, fs.constants.R_OK);
+  } catch (e) {
+    throw new Error(`Missing logbook-config.json file in ${homeConfig.mlogLocation}.  Please run mlog init to configure the logbook location before running any other commands.`);
+  }
+  // read the config in the specified directory
+  const logbookConfig = JSON.parse(fs.readFileSync(logbookConfigFile, 'utf8'));
+  logbookConfig.mlogLocation = homeConfig.mlogLocation;
+  // LOG('Read logbook config: %s', logbookConfig);
+  // save the object into the global space
+  global.logbookConfig = logbookConfig;
+  // return the parsed object
+  return logbookConfig;
 }

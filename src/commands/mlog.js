@@ -10,8 +10,7 @@ commander.version('1.0.0')
   .command('init <directory>', 'Initialize a new repository at the given location.')
   .command('config [options]', 'Set configuration options for the current logbook.')
   .command('server [options]', 'Start up a server to view the logbook in a web browser.')
-  .option('-c, --category <categoryName>', 'Category to which to add the given content.')
-  .option('-d, --date <YYYY-MM-DD>', 'Date to use for the entry.  Today\'s date will be used if not specified.')
+  .command('add [options]', 'Add an entry to the logbook', { isDefault: true })
   .parse(process.argv);
 
 LOG('*****\nCOMMAND INPUT:\n*****');
@@ -23,21 +22,6 @@ if (!commander.runningCommand) {
   LOG(`Child Command Specified "${commander.args}" - Skipping Default Actions`);
 }
 
-// https://nodejs.org/api/process.html#process_process_stdin
-// process.stdin.setEncoding('utf8');
-//
-// let data = '';
-//
-// process.stdin.on('readable', () => {
-//   const chunk = process.stdin.read();
-//   if (chunk !== null) {
-//     data += chunk;
-//   }
-// });
-//
-// process.stdin.on('end', () => {
-//   LOG(data);
-// });
 
 // TODO: determine action
 // TODO: delegate to module
