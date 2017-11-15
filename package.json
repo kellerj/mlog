@@ -31,6 +31,9 @@
     "mlog": "./src/commands/mlog.js"
   },
   "dependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-register": "^6.26.0",
     "chalk": "^2.3.0",
     "commander": "^2.11.0",
     "date-fns": "^1.29.0",
@@ -39,9 +42,6 @@
     "supports-color": "^5.0.0"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
-    "babel-register": "^6.26.0",
     "chai": "^4.1.2",
     "coveralls": "^3.0.0",
     "eslint": "^4.10.0",

@@ -1,12 +1,11 @@
-// import parseArgs from 'minimist';
+#!/usr/bin/env node -r babel-register
+
 import debug from 'debug';
 import commander from 'commander';
 
 const LOG = debug('mlog');
 
-// LOG(parseArgs(process.argv.slice(2)));
 commander.version('1.0.0')
-  // .option('-c, --category')
   .command('init <directory>', 'Initialize a new repository at the given location.')
   .command('config [options]', 'Set configuration options for the current logbook.')
   .command('server [options]', 'Start up a server to view the logbook in a web browser.')
@@ -21,10 +20,3 @@ if (!commander.runningCommand) {
 } else {
   LOG(`Child Command Specified "${commander.args}" - Skipping Default Actions`);
 }
-
-
-// TODO: determine action
-// TODO: delegate to module
-// TODO: get date to use (--today option?)
-// TODO: category to file
-// TODO: Regenerate the index for the given category.

@@ -1,3 +1,5 @@
+#!/usr/bin/env node -r babel-register
+
 import debug from 'debug';
 import commander from 'commander';
 import chalk from 'chalk';

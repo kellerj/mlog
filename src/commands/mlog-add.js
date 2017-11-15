@@ -1,3 +1,5 @@
+#!/usr/bin/env node -r babel-register
+
 import debug from 'debug';
 import commander from 'commander';
 import chalk from 'chalk';
@@ -44,8 +46,13 @@ try {
     process.stdin.on('end', () => {
       // LOG(data);
       // write file to indicated path
-      const logFile = importLogEntry(data, categoryName, entryDate, overwriteExisting);
-      console.log(chalk.green(`Saved Log to ${logFile}`));
+      try {
+        const logFile = importLogEntry(data, categoryName, entryDate, overwriteExisting);
+        console.log(chalk.green(`Saved Log to ${logFile}`));
+      } catch (e) {
+        console.log(chalk.red(e.message));
+        process.exitCode = 1;
+      }
     });
   } else {
     // output help info
