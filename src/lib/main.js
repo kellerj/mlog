@@ -1,7 +1,7 @@
 import debug from 'debug';
 import fs from 'fs';
-import os from 'os';
 import path from 'path';
+import { format } from 'date-fns';
 
 import { getConfig } from './config';
 
@@ -45,13 +45,31 @@ export function getCategoryName(categoryName) {
   return adjustedCategoryName.replace(/ /g, '_');
 }
 
-export function importLogEntry(entryText, categoryName, entryDate, overwrite = false) {
-  // TODO: confirm that entry text present
-  // TODO: if no date given, use the current date
-  // TODO: check if the date-named file already exists
-  // TODO: if so, append _# to the end of the date
-  // TODO: create the file and save the entryText to it
-  // TODO: return the path to the new file
+export function importLogEntry(entryText, categoryName, entryDateString, overwrite = false) {
+  // confirm that entry text present
+  if (!entryText) {
+    throw new Error('No entryText given for the log entry');
+  }
+  const entryPath = getCategoryPath(getCategoryName(categoryName));
+  let entryDate = entryDateString;
+  // if no date given, use the current date
+  if (!entryDate) {
+    entryDate = format(new Date(), getConfig().fileNameFormat);
+  }
+  // check if the date-named file already exists
+  const entryFile = path.format({
+    dir: entryPath,
+    name: entryDate,
+    ext: '.md',
+  });
+  if (!overwrite && fs.existsSync(entryFile)) {
+    throw new Error('Entry for the given date already exists.  Use the --overwrite flag if you want to replace it.');
+  }
+  // create the file and save the entryText to it
+  LOG('Attempting to write file: %s', entryFile);
+  fs.writeFileSync(entryFile, entryText);
+  // return the path to the new file
+  return entryFile;
 }
 
 export default {};

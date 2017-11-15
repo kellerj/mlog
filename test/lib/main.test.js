@@ -1,9 +1,10 @@
-import { expect, assert } from 'chai';
+import { expect } from 'chai';
 import { stub } from 'sinon';
 import os from 'os';
 import fs from 'fs';
 import tmp from 'tmp';
 import path from 'path';
+import dateFns from 'date-fns';
 
 import * as main from '../../src/lib/main';
 
@@ -52,8 +53,8 @@ context('lib/main', () => {
     });
     it('should create the directory if it does not exist', () => {
       const result = main.getCategoryPath('ACategory');
-      expect(fs.existsSync(result), 'directory does not exist');
-      expect(fs.statSync(result).isDirectory(), 'given path is not a directory');
+      expect(fs.existsSync(result), 'directory does not exist').to.be.true; // eslint-disable-line no-unused-expressions
+      expect(fs.statSync(result).isDirectory(), 'given path is not a directory').to.be.true; // eslint-disable-line no-unused-expressions
     });
     it('should throw an error if the directory is not writable', () => {
       // calling once to create the path
@@ -86,27 +87,34 @@ context('lib/main', () => {
       expect(result).to.equal('A_Category_With_Multiple_Spaces');
     });
   });
-  describe.skip('#importLogEntry', () => {
+  describe('#importLogEntry', () => {
     it('should fail if the entry text is blank', () => {
-      assert.fail();
+      expect(() => main.importLogEntry('')).to.throw();
     });
     it('should use the date given for the file', () => {
-      assert.fail();
+      const resultingFileName = main.importLogEntry('# New Log Entry', 'Work Log', '2017-11-10');
+      expect(path.basename(resultingFileName)).to.equal('2017-11-10.md');
     });
     it('should use the current date if no date given', () => {
-      assert.fail();
+      const resultingFileName = main.importLogEntry('# New Log Entry', 'Work Log');
+      const todaysDate = dateFns.format(new Date(), global.logbookConfig.fileNameFormat);
+      expect(path.basename(resultingFileName)).to.equal(`${todaysDate}.md`);
     });
     it('should use the default category if none given', () => {
-      assert.fail();
+      const resultingFileName = main.importLogEntry('# New Log Entry');
+      expect(resultingFileName).to.include(global.logbookConfig.defaultCategory.replace(/ /g, '_'));
     });
     it('should fail if the file already exists and the overwrite flag is not set', () => {
-      assert.fail();
+      // run once to create the file
+      const resultingFileName = main.importLogEntry('# New Log Entry', 'Work Log', '2017-11-10');
+      // make sure it exists
+      expect(fs.existsSync(resultingFileName), `${resultingFileName} does not exist after method call.`);
+      expect(() => main.importLogEntry('# New Log Entry', 'Work Log', '2017-11-10')).to.throw();
     });
     it('should create a file with the appropriate name and location', () => {
-      assert.fail();
-    });
-    it('should return the path of the just-created file', () => {
-      assert.fail();
+      const resultingFileName = main.importLogEntry('# New Log Entry', 'Work Log', '2017-11-10');
+      expect(resultingFileName, 'resulting file name should not have been unset').to.be.ok; // eslint-disable-line no-unused-expressions
+      expect(fs.existsSync(resultingFileName), `${resultingFileName} does not exist after method call.`);
     });
   });
 });
