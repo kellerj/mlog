@@ -34,7 +34,7 @@ export function getCategoryName(categoryName) {
   // replace with one from list so case matches
   // LOG('Scanning Categories: %s', getConfig().categories);
   // LOG(`Testing element ${e} against ${regex} : result: ${regex.test(e)}`);
-  const regex = RegExp(`^${adjustedCategoryName}$`, 'i');
+  const regex = RegExp(`^${adjustedCategoryName.trim()}$`, 'i');
   adjustedCategoryName = getConfig().categories.find(e =>
     regex.test(e));
   // throw an error if a bad category name
