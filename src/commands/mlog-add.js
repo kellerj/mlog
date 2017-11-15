@@ -2,10 +2,9 @@ import debug from 'debug';
 import commander from 'commander';
 import chalk from 'chalk';
 
-import { getConfig } from '../lib/config';
 import { importLogEntry } from '../lib/main';
 
-const LOG = debug('mlog-add');
+const LOG = debug('mlog:commands:add');
 
 commander.version('1.0.0')
   .usage('mlog add [options]')
@@ -43,13 +42,13 @@ try {
       }
     });
     process.stdin.on('end', () => {
-      LOG(data);
-      // TODO: write file to indicated path
+      // LOG(data);
+      // write file to indicated path
+      const logFile = importLogEntry(data, categoryName, entryDate, overwriteExisting);
+      console.log(chalk.green(`Saved Log to ${logFile}`));
     });
-    importLogEntry(data, categoryName, entryDate, overwriteExisting);
-    // console.log(chalk.green(`${logLocation} Initialized`));
   } else {
-    // TODO: output help info
+    // output help info
     commander.outputHelp();
     process.exitCode = 1;
   }
