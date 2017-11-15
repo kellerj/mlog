@@ -5,7 +5,7 @@ import path from 'path';
 
 import { getConfig } from './config';
 
-const LOG = debug('lib:main');
+const LOG = debug('mlog:lib:main');
 
 export function getCategoryPath(categoryName) {
   // build the path for the given category
@@ -24,12 +24,25 @@ export function getCategoryPath(categoryName) {
 }
 
 export function getCategoryName(categoryName) {
-  // TODO: confirm that categoryName present, use default if not given
-  // TODO: check if good category name
-  // TODO: replace with one from list so case matches
-  // TODO: if not set, use the default categoryName
-  // TODO: throw an error if a bad category name
-  // TODO: replace spaces with underscores
+  let adjustedCategoryName = categoryName;
+  // confirm that categoryName present, use default if not given
+  if (!categoryName) {
+    adjustedCategoryName = getConfig().defaultCategory;
+  }
+
+  // check if good category name
+  // replace with one from list so case matches
+  // LOG('Scanning Categories: %s', getConfig().categories);
+  // LOG(`Testing element ${e} against ${regex} : result: ${regex.test(e)}`);
+  const regex = RegExp(`^${adjustedCategoryName}$`, 'i');
+  adjustedCategoryName = getConfig().categories.find(e =>
+    regex.test(e));
+  // throw an error if a bad category name
+  if (!adjustedCategoryName) {
+    throw new Error(`Unknown Category: ${categoryName}`);
+  }
+
+  return adjustedCategoryName.replace(/ /g, '_');
 }
 
 export function importLogEntry(entryText, categoryName, entryDate, overwrite = false) {

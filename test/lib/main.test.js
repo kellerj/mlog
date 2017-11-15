@@ -63,21 +63,27 @@ context('lib/main', () => {
       fs.chmodSync(categoryPath, '755');
     });
   });
-  describe.skip('#getCategoryName', () => {
+  describe('#getCategoryName', () => {
     it('should use the default category if none given', () => {
-      assert.fail();
+      const result = main.getCategoryName(undefined);
+      expect(result).to.equal(global.logbookConfig.defaultCategory);
     });
     it('should match against the category list in a case insensitive manner', () => {
-      assert.fail();
+      const result = main.getCategoryName('anothercategory');
+      expect(result).to.match(/anothercategory/i);
     });
     it('should return the category name using the case from the configuration', () => {
-      assert.fail();
+      const result = main.getCategoryName('anothercategory');
+      expect(result).to.equal('AnotherCategory');
     });
-    it('should thrown an error if the category does not exist', () => {
-      assert.fail();
+    it('should throw an error if the category does not exist', () => {
+      expect(() => main.getCategoryName('Not A Category')).to.throw();
     });
     it('should replace all spaces in the name with underscores', () => {
-      assert.fail();
+      let result = main.getCategoryName('Work Log');
+      expect(result).to.equal('Work_Log');
+      result = main.getCategoryName('A Category With Multiple Spaces');
+      expect(result).to.equal('A_Category_With_Multiple_Spaces');
     });
   });
   describe.skip('#importLogEntry', () => {
