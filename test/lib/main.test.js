@@ -87,6 +87,7 @@ context('lib/main', () => {
       expect(result).to.equal('A_Category_With_Multiple_Spaces');
     });
   });
+
   describe('#importLogEntry', () => {
     it('should fail if the entry text is blank', () => {
       expect(() => main.importLogEntry('')).to.throw();
@@ -115,6 +116,21 @@ context('lib/main', () => {
       const resultingFileName = main.importLogEntry('# New Log Entry', 'Work Log', '2017-11-10');
       expect(resultingFileName, 'resulting file name should not have been unset').to.be.ok; // eslint-disable-line no-unused-expressions
       expect(fs.existsSync(resultingFileName), `${resultingFileName} does not exist after method call.`);
+    });
+  });
+
+  describe.skip('#generateCategoryIndexPage', () => {
+    it('should create a file named index.md in the category directory', () => {
+
+    });
+    it('should not include the index file in the list of files linked to', () => {
+
+    });
+    it('should include the category name in a header line at the start of the file', () => {
+
+    });
+    it('should order the files in reverse sort order (date descending)', () => {
+
     });
   });
 });

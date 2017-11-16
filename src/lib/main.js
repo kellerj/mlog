@@ -72,4 +72,34 @@ export function importLogEntry(entryText, categoryName, entryDateString, overwri
   return entryFile;
 }
 
+
+/**
+ * generateCategoryIndexPage - Creates or updates the index file for a given
+ * category based on the files in its directory.
+ *
+ * @param {string} categoryName Category name for which to regenerate the index.
+ *
+ * @returns {string} Path to the file just created/updated.
+ */
+export function generateCategoryIndexPage(categoryName) {
+  // TODO: get the path for the categoryName
+  // TODO: iterate over the list of files in the category path
+  // TODO: save the file
+}
+
+
+/**
+ * buildCategoryIndexFile - Builds the markdown category index file contents from a list of files.
+ *
+ * @param {string} categoryName Category name for which to regenerate the index.
+ * @param {array} logFileList  Description
+ *
+ * @returns {string} The contents of the category index file
+ */
+export function buildCategoryIndexFile(categoryName, logFileList) {
+  // TODO: build header with category name
+  // TODO: build list of files in reverse date order
+  // TODO: pull the header from the file and use as the link label?
+}
+
 export default {};

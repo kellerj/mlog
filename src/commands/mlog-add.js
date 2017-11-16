@@ -49,6 +49,7 @@ try {
       try {
         const logFile = importLogEntry(data, categoryName, entryDate, overwriteExisting);
         console.log(chalk.green(`Saved Log to ${logFile}`));
+        // TODO: regenerate category index
       } catch (e) {
         console.log(chalk.red(e.message));
         process.exitCode = 1;
