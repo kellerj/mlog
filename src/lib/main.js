@@ -149,6 +149,7 @@ export function generateCategoryIndexPage(categoryName) {
     .map(file => ({ name: file }));
   // save the file
   const indexFileName = path.join(categoryPath, 'index.md');
+  // console.log(`Generating file with parameters: ${categoryName} / ${JSON.stringify(fileList)}`);
   fs.writeFileSync(indexFileName, buildCategoryIndexFile(categoryName, fileList));
   return indexFileName;
 }

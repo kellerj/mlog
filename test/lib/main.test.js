@@ -140,36 +140,42 @@ context('lib/main', () => {
       main.generateCategoryIndexPage('Work Log');
       sandbox.mock(fs).verify();
     });
-    it('must pass a list of the file names to the buildCategoryIndexFile() function', () => {
-      sandbox.spy(main, 'buildCategoryIndexFile');
-      // create the files in the path here
-      const categoryPath = main.getCategoryPath(main.getCategoryName('Work Log'));
-      // require('debug')('test')(`Creating Test File: ${path.join(categoryPath, '2017-09-28.md')}`);
-      fs.writeFileSync(path.join(categoryPath, '2017-09-28.md'), '# Test File 1');
-      fs.writeFileSync(path.join(categoryPath, '2017-09-29.md'), '# Test File 2');
-      fs.writeFileSync(path.join(categoryPath, '2017-09-30.md'), '# Test File 3');
-      main.generateCategoryIndexPage('Work Log');
-      expect(main.buildCategoryIndexFile.calledWith('Work Log', [
-        { name: '2017-09-28.md' },
-        { name: '2017-09-29.md' },
-        { name: '2017-09-30.md' },
-      ])).to.equal(true);
-    });
-    it('should not pass the index file in the list of files linked to', () => {
-      sandbox.spy(main, 'buildCategoryIndexFile');
-      // create the files in the path here
-      const categoryPath = main.getCategoryPath(main.getCategoryName('Work Log'));
-      fs.writeFileSync(path.join(categoryPath, 'index.md'), '# Category Index File');
-      fs.writeFileSync(path.join(categoryPath, '2017-09-28.md'), '# Test File 1');
-      fs.writeFileSync(path.join(categoryPath, '2017-09-29.md'), '# Test File 2');
-      fs.writeFileSync(path.join(categoryPath, '2017-09-30.md'), '# Test File 3');
-      main.generateCategoryIndexPage('Work Log');
-      expect(main.buildCategoryIndexFile.calledWith('Work Log', [
-        { name: '2017-09-28.md' },
-        { name: '2017-09-29.md' },
-        { name: '2017-09-30.md' },
-      ])).to.equal(true);
-    });
+    // it('must pass a list of the file names to the buildCategoryIndexFile() function', () => {
+    //   sandbox.spy(main, 'buildCategoryIndexFile');
+    //   // create the files in the path here
+    //   const categoryPath = main.getCategoryPath(main.getCategoryName('Work Log'));
+    //   // require('debug')('test')(`Creating Test File: ${path.join(categoryPath, '2017-09-28.md')}`);
+    //   fs.writeFileSync(path.join(categoryPath, '2017-09-28.md'), '# Test File 1');
+    //   fs.writeFileSync(path.join(categoryPath, '2017-09-29.md'), '# Test File 2');
+    //   fs.writeFileSync(path.join(categoryPath, '2017-09-30.md'), '# Test File 3');
+    //   main.generateCategoryIndexPage('Work Log');
+    //   expect(main.buildCategoryIndexFile.calledWith('Work Log', [
+    //     { name: '2017-09-28.md' },
+    //     { name: '2017-09-29.md' },
+    //     { name: '2017-09-30.md' },
+    //   ])).to.equal(true);
+    // });
+    // it('should not pass the index file in the list of files linked to', () => {
+    //   const bcifMock = sandbox.mock(main);
+    //   bcifMock.expects('buildCategoryIndexFile')
+    //     .once()
+    //     .withArgs('Work Log', [
+    //       { name: '2017-09-28.md' },
+    //       { name: '2017-09-29.md' },
+    //       { name: '2017-09-30.md' },
+    //     ])
+    //     .callThrough();
+    //   // create the files in the path here
+    //   const categoryPath = main.getCategoryPath(main.getCategoryName('Work Log'));
+    //   fs.writeFileSync(path.join(categoryPath, 'index.md'), '# Category Index File');
+    //   fs.writeFileSync(path.join(categoryPath, '2017-09-28.md'), '# Test File 1');
+    //   fs.writeFileSync(path.join(categoryPath, '2017-09-29.md'), '# Test File 2');
+    //   fs.writeFileSync(path.join(categoryPath, '2017-09-30.md'), '# Test File 3');
+    //   main.generateCategoryIndexPage('Work Log');
+    //
+    //
+    //   bcifMock.verify();
+    // });
   });
 
   describe('#buildCategoryIndexFile', () => {
