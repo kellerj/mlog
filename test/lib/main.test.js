@@ -43,6 +43,7 @@ context('lib/main', () => {
     if (fs.existsSync(logbookPath)) {
       fs.chmodSync(logbookPath, '755');
     }
+    // require('debug')('test')(`Removing ${tempDir.name}`);
     tempDir.removeCallback();
   });
 
@@ -121,49 +122,53 @@ context('lib/main', () => {
     });
   });
 
-  describe.skip('#generateCategoryIndexPage', () => {
+  describe('#generateCategoryIndexPage', () => {
     it('should return the path to the index.md file', () => {
-      const categoryPath = main.getCategoryPath('Work Log');
+      const categoryPath = main.getCategoryPath(main.getCategoryName('Work Log'));
       const result = main.generateCategoryIndexPage('Work Log');
       expect(result).to.equal(path.join(categoryPath, 'index.md'));
     });
     it('should create a file named index.md in the category directory', () => {
-      const categoryPath = main.getCategoryPath('Work Log');
+      const categoryPath = main.getCategoryPath(main.getCategoryName('Work Log'));
       main.generateCategoryIndexPage('Work Log');
       expect(fs.existsSync(path.join(categoryPath, 'index.md'))).to.equal(true, 'index.md file not created');
     });
     it('should read the files from the category directory', () => {
-      const categoryPath = main.getCategoryPath('Work Log');
-      sandbox.mock(fs).expects('readdirSync').once().withArgs(categoryPath);
+      const categoryPath = main.getCategoryPath(main.getCategoryName('Work Log'));
+      sandbox.mock(fs).expects('readdirSync').once().withArgs(categoryPath)
+        .callThrough();
       main.generateCategoryIndexPage('Work Log');
       sandbox.mock(fs).verify();
     });
     it('must pass a list of the file names to the buildCategoryIndexFile() function', () => {
       sandbox.spy(main, 'buildCategoryIndexFile');
-      // TODO: create the files in the path here
-      const categoryPath = main.getCategoryPath('Work Log');
+      // create the files in the path here
+      const categoryPath = main.getCategoryPath(main.getCategoryName('Work Log'));
+      // require('debug')('test')(`Creating Test File: ${path.join(categoryPath, '2017-09-28.md')}`);
       fs.writeFileSync(path.join(categoryPath, '2017-09-28.md'), '# Test File 1');
       fs.writeFileSync(path.join(categoryPath, '2017-09-29.md'), '# Test File 2');
       fs.writeFileSync(path.join(categoryPath, '2017-09-30.md'), '# Test File 3');
+      main.generateCategoryIndexPage('Work Log');
       expect(main.buildCategoryIndexFile.calledWith('Work Log', [
         { name: '2017-09-28.md' },
         { name: '2017-09-29.md' },
         { name: '2017-09-30.md' },
-      ]));
+      ])).to.equal(true);
     });
     it('should not pass the index file in the list of files linked to', () => {
       sandbox.spy(main, 'buildCategoryIndexFile');
-      // TODO: create the files in the path here
-      const categoryPath = main.getCategoryPath('Work Log');
+      // create the files in the path here
+      const categoryPath = main.getCategoryPath(main.getCategoryName('Work Log'));
       fs.writeFileSync(path.join(categoryPath, 'index.md'), '# Category Index File');
       fs.writeFileSync(path.join(categoryPath, '2017-09-28.md'), '# Test File 1');
       fs.writeFileSync(path.join(categoryPath, '2017-09-29.md'), '# Test File 2');
       fs.writeFileSync(path.join(categoryPath, '2017-09-30.md'), '# Test File 3');
+      main.generateCategoryIndexPage('Work Log');
       expect(main.buildCategoryIndexFile.calledWith('Work Log', [
         { name: '2017-09-28.md' },
         { name: '2017-09-29.md' },
         { name: '2017-09-30.md' },
-      ]));
+      ])).to.equal(true);
     });
   });
 

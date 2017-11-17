@@ -13,6 +13,14 @@ import { getConfig } from './config';
 
 const LOG = debug('mlog:lib:main');
 
+
+/**
+ * getCategoryPath - Description
+ *
+ * @param {string} categoryName Description
+ *
+ * @returns {String} Description
+ */
 export function getCategoryPath(categoryName) {
   // build the path for the given category
   const categoryPath = path.join(getConfig().mlogLocation, categoryName);
@@ -29,6 +37,13 @@ export function getCategoryPath(categoryName) {
   return categoryPath;
 }
 
+/**
+ * getCategoryName - Description
+ *
+ * @param {string} categoryName Description
+ *
+ * @returns {string} Description
+ */
 export function getCategoryName(categoryName) {
   let adjustedCategoryName = categoryName;
   // confirm that categoryName present, use default if not given
@@ -89,22 +104,6 @@ export function importLogEntry(entryText, categoryName, entryDateString, overwri
   return entryFile;
 }
 
-
-/**
- * generateCategoryIndexPage - Creates or updates the index file for a given
- * category based on the files in its directory.
- *
- * @param {string} categoryName Category name for which to regenerate the index.
- *
- * @returns {string} Path to the file just created/updated.
- */
-export function generateCategoryIndexPage(categoryName) {
-  // TODO: get the path for the categoryName
-  // TODO: iterate over the list of files in the category path
-  // TODO: save the file
-}
-
-
 /**
  * buildCategoryIndexFile - Builds the markdown category index file contents from a list of files.
  *
@@ -129,5 +128,30 @@ export function buildCategoryIndexFile(categoryName, logFileList) {
   LOG(fileContents);
   return fileContents;
 }
+
+/**
+ * generateCategoryIndexPage - Creates or updates the index file for a given
+ * category based on the files in its directory.
+ *
+ * @param {string} categoryName Category name for which to regenerate the index.
+ *
+ * @returns {string} Path to the file just created/updated.
+ */
+export function generateCategoryIndexPage(categoryName) {
+  // get the path for the categoryName
+  const categoryPath = getCategoryPath(getCategoryName(categoryName));
+  // iterate over the list of files in the category path
+  LOG(`Scanning CategoryPath: ${categoryPath}`);
+  const fileNameList = fs.readdirSync(categoryPath);
+  LOG(`Found Files: ${fileNameList}`);
+  const fileList = fileNameList
+    .filter(file => (file !== 'index.md'))
+    .map(file => ({ name: file }));
+  // save the file
+  const indexFileName = path.join(categoryPath, 'index.md');
+  fs.writeFileSync(indexFileName, buildCategoryIndexFile(categoryName, fileList));
+  return indexFileName;
+}
+
 
 export default {};
