@@ -69,8 +69,14 @@ context('lib/main', () => {
   });
   describe('#getCategoryName', () => {
     it('should use the default category if none given', () => {
-      const result = main.getCategoryName(undefined);
-      expect(result).to.equal(global.logbookConfig.defaultCategory);
+      let result = main.getCategoryName(undefined);
+      expect(result).to.equal(global.logbookConfig.defaultCategory, 'undefined categoryName');
+      result = main.getCategoryName(null);
+      expect(result).to.equal(global.logbookConfig.defaultCategory, 'null categoryName');
+      result = main.getCategoryName('');
+      expect(result).to.equal(global.logbookConfig.defaultCategory, 'empty string categoryName');
+      result = main.getCategoryName('   ');
+      expect(result).to.equal(global.logbookConfig.defaultCategory, 'spaces categoryName');
     });
     it('should match against the category list in a case insensitive manner', () => {
       const result = main.getCategoryName('anothercategory');

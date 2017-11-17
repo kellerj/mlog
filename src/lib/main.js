@@ -47,7 +47,7 @@ export function getCategoryPath(categoryName) {
 export function getCategoryName(categoryName) {
   let adjustedCategoryName = categoryName;
   // confirm that categoryName present, use default if not given
-  if (!categoryName) {
+  if (!categoryName || !categoryName.trim()) {
     adjustedCategoryName = getConfig().defaultCategory;
   }
 
@@ -56,8 +56,7 @@ export function getCategoryName(categoryName) {
   // LOG('Scanning Categories: %s', getConfig().categories);
   // LOG(`Testing element ${e} against ${regex} : result: ${regex.test(e)}`);
   const regex = RegExp(`^${adjustedCategoryName.trim()}$`, 'i');
-  adjustedCategoryName = getConfig().categories.find(e =>
-    regex.test(e));
+  adjustedCategoryName = getConfig().categories.find(e => regex.test(e));
   // throw an error if a bad category name
   if (!adjustedCategoryName) {
     throw new Error(`Unknown Category: ${categoryName}`);
