@@ -1,3 +1,9 @@
+/**
+ * @overview Functions related to the main functionality of
+ * maintaining the logbook files and strucutre.
+ * @module lib/main
+ * @author Jonathan Keller
+ */
 import debug from 'debug';
 import fs from 'fs';
 import path from 'path';
@@ -45,6 +51,17 @@ export function getCategoryName(categoryName) {
   return adjustedCategoryName.replace(/ /g, '_');
 }
 
+
+/**
+ * importLogEntry - Take the given text and save it to a logbook entry file.
+ *
+ * @param {string}  entryText         The contents to write to the entry file.
+ * @param {string}  [categoryName]    Category to use, the path will be derived from this value.
+ * @param {string}  [entryDateString] The date to use for the file name in YYYY-MM-DD format.
+ * @param {boolean} [overwrite=false] Whether to overwrite an existing entry file if present.
+ *
+ * @returns {string} The path of the logfile entry created.
+ */
 export function importLogEntry(entryText, categoryName, entryDateString, overwrite = false) {
   // confirm that entry text present
   if (!entryText) {
@@ -91,15 +108,26 @@ export function generateCategoryIndexPage(categoryName) {
 /**
  * buildCategoryIndexFile - Builds the markdown category index file contents from a list of files.
  *
- * @param {string} categoryName Category name for which to regenerate the index.
- * @param {array} logFileList  Description
+ * @param {string} categoryName - Category name for which to regenerate the index.
+ * @param {Object[]} logFileList - List of objects containing information on the logbook files in the category's Directory.
+ * @param {string} logFileList[].name - The name of the file within the directory
  *
  * @returns {string} The contents of the category index file
  */
 export function buildCategoryIndexFile(categoryName, logFileList) {
-  // TODO: build header with category name
-  // TODO: build list of files in reverse date order
-  // TODO: pull the header from the file and use as the link label?
+  // build header with category name
+  let fileContents = `# ${categoryName}\n\n`;
+  if (logFileList) {
+    // TODO: build list of files in reverse date order
+    logFileList.sort((a, b) => (b.name.localeCompare(a)));
+    logFileList.forEach((file) => {
+      fileContents += `* [${path.basename(file.name, '.md')}](${file.name})\n`;
+    });
+    // TODO: pull the header from the file and use as the link label?
+  }
+  fileContents += `\n\n> Generated at: ${new Date()}`;
+  LOG(fileContents);
+  return fileContents;
 }
 
 export default {};
