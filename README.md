@@ -2,7 +2,11 @@
 
 [![Build Status](https://travis-ci.org/kellerj/mlog.svg?branch=master)](https://travis-ci.org/kellerj/mlog) [![Coverage Status](https://coveralls.io/repos/github/kellerj/mlog/badge.svg?branch=master)](https://coveralls.io/github/kellerj/mlog?branch=master)
 
-**TBD**: Still deciding what I want this app to do.
+Attempting to replace Day One as my logging storage system.  The goal here is to be able to pipe in a markdown log for the day and have it stored by note category and date on the file system.
+
+Then generate index files in the parent directories which allow linking between the files in a markdown viewer which handled links.
+
+Future development would include running a local HTTP server which performs on-the-fly conversion of the MD files into HTML files for viewing in a browser.  Also the possibility of creating and editing the files for a given date using your Markdown editor of choice.
 
 ## Installing
 
@@ -15,7 +19,7 @@ to install the tool on your path.
 
 ## Requirements
 
-* Node 6+
+* Node 8+
 
 ## Usage
 

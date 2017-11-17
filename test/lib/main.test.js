@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { stub } from 'sinon';
+import sinon from 'sinon';
 import os from 'os';
 import fs from 'fs';
 import tmp from 'tmp';
@@ -7,6 +7,8 @@ import path from 'path';
 import dateFns from 'date-fns';
 
 import * as main from '../../src/lib/main';
+
+const sandbox = sinon.createSandbox();
 
 context('lib/main', () => {
   let tempDir = { name: path.format({ dir: process.cwd(), base: 'temp' }) };
@@ -18,7 +20,7 @@ context('lib/main', () => {
     logbookPath = path.format({ dir: tempDir.name, base: 'logbook' });
     fs.mkdirSync(homeDir);
     fs.mkdirSync(logbookPath);
-    stub(os, 'homedir').returns(homeDir);
+    sandbox.stub(os, 'homedir').returns(homeDir);
 
     global.logbookConfig = {
       mlogLocation: logbookPath,
@@ -37,7 +39,7 @@ context('lib/main', () => {
 
   afterEach(() => {
     delete global.logbookConfig;
-    os.homedir.restore();
+    sandbox.restore();
     if (fs.existsSync(logbookPath)) {
       fs.chmodSync(logbookPath, '755');
     }
@@ -123,14 +125,62 @@ context('lib/main', () => {
     it('should create a file named index.md in the category directory', () => {
 
     });
-    it('should not include the index file in the list of files linked to', () => {
+    it('should read the files from the category directory', () => {
 
+    });
+    it('must pass a list of the file names to the buildCategoryIndexFile() function', () => {
+
+    });
+    it('should not pass the index file in the list of files linked to', () => {
+      // const result = main.buildCategoryIndexFile('Work Log', [])
+    });
+  });
+
+  describe.skip('#buildCategoryIndexFile', () => {
+    it('should not fail when the passed in list is empty or null', () => {
+      expect(() => main.buildCategoryIndexFile(
+        'Work Log',
+        [],
+      ), 'empty file list').to.not.throw();
+      expect(() => main.buildCategoryIndexFile(
+        'Work Log',
+        null,
+      ), 'null file list').to.not.throw();
     });
     it('should include the category name in a header line at the start of the file', () => {
-
+      const result = main.buildCategoryIndexFile(
+        'Work Log',
+        [
+          { name: '2017-09-28.md' },
+          { name: '2017-09-29.md' },
+          { name: '2017-09-30.md' },
+        ],
+      );
+      expect(result.split('\n')[0]).to.match(/^# .*Work Log.*/);
+    });
+    it('should include markdown links for each of the given files', () => {
+      const result = main.buildCategoryIndexFile(
+        'Work Log',
+        [
+          { name: '2017-09-28.md' },
+          { name: '2017-09-29.md' },
+          { name: '2017-09-30.md' },
+        ],
+      );
+      expect(result).to.match(/\[2017-09-28\]\(2017-09-28\.md\)/);
+      expect(result).to.match(/\[2017-09-29\]\(2017-09-29\.md\)/);
+      expect(result).to.match(/\[2017-09-30\]\(2017-09-30\.md\)/);
     });
     it('should order the files in reverse sort order (date descending)', () => {
-
+      const result = main.buildCategoryIndexFile(
+        'Work Log',
+        [
+          { name: '2017-09-28.md' },
+          { name: '2017-09-29.md' },
+          { name: '2017-09-30.md' },
+        ],
+      );
+      expect(result).to.match(/.*2017-09-28.*2017-09-29.*2017-09-30/m);
     });
   });
 });
