@@ -144,9 +144,7 @@ export function generateCategoryIndexPage(categoryName) {
   LOG(`Scanning CategoryPath: ${categoryPath}`);
   const fileNameList = fs.readdirSync(categoryPath);
   LOG(`Found Files: ${fileNameList}`);
-  const fileList = fileNameList
-    .filter(file => (file !== 'index.md'))
-    .map(file => ({ name: file }));
+  const fileList = fileNameList.filter(file => (file !== 'index.md')).map(file => ({ name: file }));
   // save the file
   const indexFileName = path.join(categoryPath, 'index.md');
   // console.log(`Generating file with parameters: ${categoryName} / ${JSON.stringify(fileList)}`);
