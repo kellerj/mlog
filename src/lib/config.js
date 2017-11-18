@@ -7,8 +7,33 @@ import defaultConfig from './default-config';
 
 const LOG = debug('mlog:lib:config');
 
+const knownListOptions = ['categories'];
+const knownStringOptions = ['defaultCategory', 'fileNameFormat', 'title'];
+
+
 function getConfigFileLocation() {
   return path.format({ dir: os.homedir(), base: '.mlog-config.json' });
+}
+
+/**
+ * Check that the given option name matches a known configuration item name.
+ *
+ * @param  {string} optionName
+ * @return {boolean}
+ */
+export function validateStringOptionName(optionName) {
+  return knownStringOptions.includes(optionName);
+}
+
+/**
+ * Check that the given option name matches a known list-type
+ * configuration item name.
+ *
+ * @param  {string} optionName
+ * @return {boolean}
+ */
+export function validateListOptionName(optionName) {
+  return knownListOptions.includes(optionName);
 }
 
 export function prepareDirectory(logLocation) {
@@ -48,22 +73,6 @@ export function writeHomeConfig(logLocation) {
   const config = { mlogLocation: logLocation };
   fs.writeFileSync(configFileLocation, JSON.stringify(config, null, 2));
   return configFileLocation;
-}
-
-/**
- * Prepare the logbook configuration file based on the default config in the specified directory.
- *
- * @param  {string} logLocation The absolute path to the location to create the config file.
- * @return {string}             The absolute path of the created configuration file.
- */
-export function prepareLogbookConfig(logLocation) {
-  // check for config file in target location and create if not there
-  const logbookConfigFile = path.format({ dir: logLocation, base: 'logbook-config.json' });
-  if (!fs.existsSync(logbookConfigFile)) {
-    // Create default config file
-    fs.writeFileSync(logbookConfigFile, JSON.stringify(defaultConfig, null, 2));
-  }
-  return logbookConfigFile;
 }
 
 /**
@@ -109,4 +118,63 @@ export function getConfig() {
   global.logbookConfig = logbookConfig;
   // return the parsed object
   return logbookConfig;
+}
+
+/**
+ * updates a string-value type config property and returns the updated object
+ * @param  {string} optionName
+ * @param  {string} optionValue
+ * @return {[type]}             a copy of the config object with the update in place.
+ */
+export function updateStringConfig(optionName, optionValue) {
+  // update the config
+  getConfig()[optionName] = optionValue;
+  const newConfig = Object.assign({}, getConfig());
+  // make a copy, and remove the mlogLocation
+  delete newConfig.mlogLocation;
+  return newConfig;
+}
+
+/**
+ * updates a string-list-value type config property and returns the updated object
+ * @param  {string} optionName
+ * @param  {string} optionValue
+ * @return {[type]}             a copy of the config object with the update in place.
+ */
+export function addToListConfig(optionName, optionValue) {
+  // update the config
+  getConfig()[optionName].push(optionValue);
+  const newConfig = Object.assign({}, getConfig());
+  // make a copy, and remove the mlogLocation
+  delete newConfig.mlogLocation;
+  return newConfig;
+}
+
+/**
+ * Save the logbook configuration file based on the current config in memory.
+ *
+ * @param  {string} configObject
+ */
+export function saveLogbookConfig(configObject) {
+  const logLocation = getConfig().mlogLocation;
+  // check for config file in target location and create if not there
+  const logbookConfigFile = path.format({ dir: logLocation, base: 'logbook-config.json' });
+  // Create default config file
+  fs.writeFileSync(logbookConfigFile, JSON.stringify(configObject, null, 2));
+}
+
+/**
+ * Prepare the logbook configuration file based on the default config in the specified directory.
+ *
+ * @param  {string} logLocation The absolute path to the location to create the config file.
+ * @return {string}             The absolute path of the created configuration file.
+ */
+export function prepareLogbookConfig(logLocation) {
+  // check for config file in target location and create if not there
+  const logbookConfigFile = path.format({ dir: logLocation, base: 'logbook-config.json' });
+  if (!fs.existsSync(logbookConfigFile)) {
+    // Create default config file
+    fs.writeFileSync(logbookConfigFile, JSON.stringify(defaultConfig, null, 2));
+  }
+  return logbookConfigFile;
 }

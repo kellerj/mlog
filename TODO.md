@@ -7,9 +7,9 @@
 - [x] Accept input piped into command and save in appropriate location
 - [ ] command line setting for configuration options
     - [x] Storage location
-        - [ ] Check if path exists
-        - [ ] create directory if not
-        - [ ] Create default config file if not exists
+        - [x] Check if path exists
+        - [x] create directory if not
+        - [x] Create default config file if not exists
     - [ ] options (`mlog option --set <name> <value>`)
         - [ ] show (js-object-pretty-print?, yamprint?)
         - [ ] add (to list option)
