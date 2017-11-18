@@ -50,6 +50,12 @@ export function writeHomeConfig(logLocation) {
   return configFileLocation;
 }
 
+/**
+ * Prepare the logbook configuration file based on the default config in the specified directory.
+ *
+ * @param  {string} logLocation The absolute path to the location to create the config file.
+ * @return {string}             The absolute path of the created configuration file.
+ */
 export function prepareLogbookConfig(logLocation) {
   // check for config file in target location and create if not there
   const logbookConfigFile = path.format({ dir: logLocation, base: 'logbook-config.json' });
@@ -60,6 +66,17 @@ export function prepareLogbookConfig(logLocation) {
   return logbookConfigFile;
 }
 
+/**
+ * Get the current configuration for the application based on the logbook
+ * location stored in the home directory and the configuration file stored
+ * in that location.
+ * @return {Object}   config - the configuration object for the application
+ * @return {string}   config.defaultCategory - The category to use if no category is specified on the command line.
+ * @return {string}   config.fileNameFormat - the Date format string to use on entry date given.
+ * @return {string}   config.title - The title of this logbook.
+ * @return {string}   config.mlogLocation - the absolute path of the logbook
+ * @return {string[]} config.categories - array of valid categories which can be specified
+ */
 export function getConfig() {
   // check if the global config has been loaded, and return that if present
   if (global.logbookConfig) {

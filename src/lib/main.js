@@ -7,34 +7,32 @@
 import debug from 'debug';
 import fs from 'fs';
 import path from 'path';
-import { format } from 'date-fns';
+import { format, parse } from 'date-fns';
 
 import { getConfig } from './config';
 
 const LOG = debug('mlog:lib:main');
 
-
 /**
- * getCategoryPath - Description
+ * Given an optional date string from the command line, obtain and format the date
+ * as specified in the configuration for the logbook.
  *
- * @param {string} categoryName Description
- *
- * @returns {String} Description
+ * @param  {string} [entryDateString] A string in a parsable date format.
+ * @return {string}                   The date reformatted as per the config.
  */
-export function getCategoryPath(categoryName) {
-  // build the path for the given category
-  const categoryPath = path.join(getConfig().mlogLocation, categoryName);
-  // test that it exists and is writable
-  if (!fs.existsSync(categoryPath)) {
-    fs.mkdirSync(categoryPath);
+export function getEntryDate(entryDateString) {
+  // set to now if no input string
+  let entryDate;
+  // if no date given, use the current date
+  if (!entryDateString) {
+    entryDate = new Date();
+  } else {
+    // if input string, parse the date and throw if invalid
+    entryDate = parse(entryDateString);
   }
-  try {
-    // eslint-disable-next-line no-bitwise
-    fs.accessSync(categoryPath, fs.constants.W_OK | fs.constants.R_OK);
-  } catch (e) {
-    throw new Error(`Unable to write to ${categoryPath}`);
-  }
-  return categoryPath;
+
+  // format the parsed date and return it
+  return format(entryDate, getConfig().fileNameFormat);
 }
 
 /**
@@ -62,9 +60,34 @@ export function getCategoryName(categoryName) {
     throw new Error(`Unknown Category: ${categoryName}`);
   }
 
-  return adjustedCategoryName.replace(/ /g, '_');
+  return adjustedCategoryName;
 }
 
+/**
+ * getCategoryPath - Description
+ *
+ * @param {string} categoryName Description
+ *
+ * @returns {string} Description
+ */
+export function getCategoryPath(categoryName) {
+  if (!categoryName) {
+    categoryName = getCategoryName(categoryName);
+  }
+  // build the path for the given category
+  const categoryPath = path.join(getConfig().mlogLocation, categoryName.replace(/ /g, '_'));
+  // test that it exists and is writable
+  if (!fs.existsSync(categoryPath)) {
+    fs.mkdirSync(categoryPath);
+  }
+  try {
+    // eslint-disable-next-line no-bitwise
+    fs.accessSync(categoryPath, fs.constants.W_OK | fs.constants.R_OK);
+  } catch (e) {
+    throw new Error(`Unable to write to ${categoryPath}`);
+  }
+  return categoryPath;
+}
 
 /**
  * importLogEntry - Take the given text and save it to a logbook entry file.
@@ -81,12 +104,8 @@ export function importLogEntry(entryText, categoryName, entryDateString, overwri
   if (!entryText) {
     throw new Error('No entryText given for the log entry');
   }
-  const entryPath = getCategoryPath(getCategoryName(categoryName));
-  let entryDate = entryDateString;
-  // if no date given, use the current date
-  if (!entryDate) {
-    entryDate = format(new Date(), getConfig().fileNameFormat);
-  }
+  const entryPath = getCategoryPath(categoryName);
+  const entryDate = getEntryDate(entryDateString);
   // check if the date-named file already exists
   const entryFile = path.format({
     dir: entryPath,
@@ -138,7 +157,7 @@ export function buildCategoryIndexFile(categoryName, logFileList) {
  */
 export function generateCategoryIndexPage(categoryName) {
   // get the path for the categoryName
-  const categoryPath = getCategoryPath(getCategoryName(categoryName));
+  const categoryPath = getCategoryPath(categoryName);
   // iterate over the list of files in the category path
   LOG(`Scanning CategoryPath: ${categoryPath}`);
   const fileNameList = fs.readdirSync(categoryPath);

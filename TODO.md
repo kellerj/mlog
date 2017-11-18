@@ -4,7 +4,7 @@
 
 ### Initial Release (1.0.0)
 
-- [ ] Accept input piped into command and save in appropriate location
+- [x] Accept input piped into command and save in appropriate location
 - [ ] command line setting for configuration options
     - [x] Storage location
         - [ ] Check if path exists
@@ -15,7 +15,8 @@
         - [ ] add (to list option)
         - [ ] set
         - [ ] save to JSON file in target location
-- [ ] exit out unless storage location set
+- [x] exit out unless storage location set
+- [ ] mlog-open command to open the mlogDirectory
 
 
 
