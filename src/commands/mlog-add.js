@@ -4,7 +4,7 @@ import debug from 'debug';
 import commander from 'commander';
 import chalk from 'chalk';
 
-import { importLogEntry, getCategoryName } from '../lib/main';
+import { importLogEntry, getCategoryName, getEntryDate } from '../lib/main';
 
 const LOG = debug('mlog:commands:add');
 
@@ -18,19 +18,12 @@ commander.version('1.0.0')
 LOG('*****\nCOMMAND INPUT:\n*****');
 LOG(commander);
 
-let categoryName = commander.category;
-let entryDate = commander.date;
-const overwriteExisting = commander.overwrite;
-
-// const logLocation = commander.args[0];
-
 try {
-  // const logBase = getConfig().mlogLocation;
-
-  // TODO: parse, validate and format Date
-
   // validate categoryName (the below throws if invalid)
-  categoryName = getCategoryName(categoryName);
+  const categoryName = getCategoryName(commander.category);
+  // parse, validate and format Date
+  const entryDate = getEntryDate(commander.date);
+  const overwriteExisting = commander.overwrite;
 
   if (!process.stdin.isTTY) {
     LOG('Reading entry from stdin');

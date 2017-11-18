@@ -17,21 +17,21 @@
         - [ ] save to JSON file in target location
 - [x] exit out unless storage location set
 - [ ] mlog-open command to open the mlogDirectory
-
-
+- [ ] generate index files
+    - [x] Per category indexes
+    - [ ] list of categories
+- [x] json config file in storage location
 
 ### Planned Features
 
-- [ ] Add entry
-- [ ] list entries
+- [ ] Add entry (via editor)
+- [ ] list entries in category with date range
 - [ ] move entry
-- [ ] display entry
+- [ ] display entry - with option to render to HTML and open in browser
 - [ ] edit entry
 - [ ] set Editor command
 - [ ] set view command
-- [ ] start server
-- [ ] generate index files
-- [ ] json config file in storage location
+- [ ] local HTTP server with rendered contents
 - [ ] if more than one on a day - merge?  option to not merge? (--no-append)
 
 ## Notes
