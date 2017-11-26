@@ -6,10 +6,9 @@ import chalk from 'chalk';
 
 import * as config from '../lib/config';
 
-const LOG = debug('mlog-init');
+const LOG = debug('mlog:commands:init');
 
-commander.version('1.0.0')
-  .usage('mlog init <path>')
+commander.usage('<path>')
   .parse(process.argv);
 
 LOG('*****\nCOMMAND INPUT:\n*****');

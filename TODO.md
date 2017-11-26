@@ -33,6 +33,12 @@
 - [ ] set view command
 - [ ] local HTTP server with rendered contents
 - [ ] if more than one on a day - merge?  option to not merge? (--no-append)
+- [ ] entry encryption (for when entry file stored on cloud service like dropbox)
+    - [ ] option on per-entry basis or globally
+    - [ ] storage of key in home dir config file
+    - [ ] use of JSON storage of object when encrypted?
+        - [ ] metadata like title and date in wrapper
+        - [ ] base-64-encoded content?
 
 ## Notes
 

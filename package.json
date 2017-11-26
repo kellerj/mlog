@@ -1,6 +1,6 @@
 {
   "name": "markdown-log",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Markdown Log Tracker",
   "main": "commands/mlog.js",
   "scripts": {
@@ -28,8 +28,14 @@
     "url": "https://github.com/kellerj/mlog.git"
   },
   "bin": {
-    "mlog": "./src/commands/mlog.js"
+    "mlog": "./src/commands/mlog.js",
+    "mlog-add": "./src/commands/mlog-add.js",
+    "mlog-init": "./src/commands/mlog-init.js",
+    "mlog-config": "./src/commands/mlog-config.js"
   },
+  "files": [
+    "src"
+  ],
   "dependencies": {
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.6.1",

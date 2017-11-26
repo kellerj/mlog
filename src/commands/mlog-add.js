@@ -8,8 +8,7 @@ import { importLogEntry, getCategoryName, getEntryDate } from '../lib/main';
 
 const LOG = debug('mlog:commands:add');
 
-commander.version('1.0.0')
-  .usage('mlog add [options]')
+commander.usage('[options]')
   .option('-c, --category <categoryName>', 'Category to which to add the given content.')
   .option('-d, --date <YYYY-MM-DD>', 'Date to use for the entry.  Today\'s date will be used if not specified.')
   .option('-o, --overwrite', 'If an entry already exists for this date, replace it.')
