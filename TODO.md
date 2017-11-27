@@ -11,12 +11,12 @@
         - [x] create directory if not
         - [x] Create default config file if not exists
     - [ ] options (`mlog option --set <name> <value>`)
-        - [ ] show (js-object-pretty-print?, yamprint?)
+        - [x] show (js-object-pretty-print?, yamprint?)
         - [x] add (to list option)
         - [x] set
         - [x] save to JSON file in target location
 - [x] exit out unless storage location set
-- [ ] mlog-open command to open the mlogDirectory
+- [x] mlog-open command to open the mlogDirectory
 - [ ] generate index files
     - [x] Per category indexes
     - [ ] list of categories

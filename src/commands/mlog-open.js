@@ -1,0 +1,17 @@
+#!/usr/bin/env node -r babel-register
+
+// import debug from 'debug';
+// import commander from 'commander';
+import chalk from 'chalk';
+import opn from 'opn';
+
+import { getConfig } from '../lib/config';
+
+// const LOG = debug('mlog:commands:open');
+
+try {
+  opn(getConfig().mlogLocation);
+} catch (e) {
+  console.log(chalk.red(e.message));
+  process.exitCode = 1;
+}

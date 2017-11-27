@@ -12,7 +12,9 @@ commander
   .command('config [command] [options]', 'Set configuration options for the current logbook.')
   //.command('server [options]', 'Start up a server to view the logbook in a web browser.')
   .command('add [options]', 'Add an entry to the logbook', { isDefault: true })
-  .parse(process.argv);
+  .command('open', 'Open the logbook directory in the file system browser.');
+
+commander.parse(process.argv);
 
 LOG('*****\nCOMMAND INPUT:\n*****');
 LOG(commander);

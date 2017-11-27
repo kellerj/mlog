@@ -31,6 +31,7 @@
     "mlog": "./src/commands/mlog.js",
     "mlog-add": "./src/commands/mlog-add.js",
     "mlog-init": "./src/commands/mlog-init.js",
+    "mlog-open": "./src/commands/mlog-open.js",
     "mlog-config": "./src/commands/mlog-config.js"
   },
   "files": [
@@ -44,6 +45,7 @@
     "commander": "^2.11.0",
     "date-fns": "^1.29.0",
     "debug": "^3.1.0",
+    "opn": "^5.1.0",
     "sprintf-js": "^1.1.1",
     "supports-color": "^5.0.0",
     "yamprint": "^0.5.7",
