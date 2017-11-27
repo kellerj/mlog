@@ -10,7 +10,7 @@ import { getConfig } from '../lib/config';
 // const LOG = debug('mlog:commands:open');
 
 try {
-  opn(getConfig().mlogLocation);
+  opn(getConfig().mlogLocation, { wait: false });
 } catch (e) {
   console.log(chalk.red(e.message));
   process.exitCode = 1;
