@@ -7,10 +7,18 @@ import { yamprint } from 'yamprint';
 import { Themes } from 'yamprint-ansi-color';
 
 import * as config from '../lib/config';
+import { generateMainIndexPage } from '../lib/main';
 
 const LOG = debug('mlog:commands:config');
 
 const yp = yamprint.create(Themes.regular);
+
+// eslint-disable-next-line no-unused-vars
+function postProcessConfigChange(actionType, optionName, optionValue) {
+  if (optionName === 'categories') {
+    generateMainIndexPage();
+  }
+}
 
 function handleSetValue(optionName, optionValue) {
   LOG('Command: SET %s %s', optionName, optionValue);
@@ -22,6 +30,7 @@ function handleSetValue(optionName, optionValue) {
   const newConfig = config.updateStringConfig(optionName, optionValue);
   // save the updated config to JSON (savecurrentconfig)
   config.saveLogbookConfig(newConfig);
+  postProcessConfigChange('set', optionName, optionValue);
 }
 
 function handleAddListValue(optionName, optionValue) {
@@ -34,6 +43,7 @@ function handleAddListValue(optionName, optionValue) {
   const newConfig = config.addToListConfig(optionName, optionValue);
   // save the updated config to JSON (savecurrentconfig)
   config.saveLogbookConfig(newConfig);
+  postProcessConfigChange('add', optionName, optionValue);
 }
 
 function handleShowOptions() {

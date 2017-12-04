@@ -3,9 +3,13 @@
 import debug from 'debug';
 import commander from 'commander';
 import chalk from 'chalk';
+import { yamprint } from 'yamprint';
+import { Themes } from 'yamprint-ansi-color';
 
-import { prepareDirectory, writeHomeConfig, prepareLogbookConfig } from '../lib/config';
+import { prepareDirectory, writeHomeConfig, prepareLogbookConfig, getConfig } from '../lib/config';
 import { generateMainIndexPage } from '../lib/main';
+
+const yp = yamprint.create(Themes.regular);
 
 const LOG = debug('mlog:commands:init');
 
@@ -23,6 +27,8 @@ try {
   prepareLogbookConfig(logLocation);
   generateMainIndexPage();
   console.log(chalk.green(`${logLocation} Initialized`));
+  process.stdout.write(yp(getConfig()));
+  process.stdout.write('\n');
 } catch (e) {
   console.log(chalk.red(e.message));
   process.exitCode = 1;

@@ -76,13 +76,11 @@ function convertCategoryNameToFileSystemName(categoryName) {
 /**
  * getCategoryPath - Description
  *
- * @param {string} categoryName
+ * @param {string} inputCategoryName
  * @returns {string}
  */
-export function getCategoryPath(categoryName) {
-  if (!categoryName) {
-    categoryName = getCategoryName(categoryName);
-  }
+export function getCategoryPath(inputCategoryName) {
+  const categoryName = getCategoryName(inputCategoryName);
   // build the path for the given category
   const categoryPath = path.join(
     getConfig().mlogLocation,
@@ -148,7 +146,7 @@ export function buildCategoryIndexFile(categoryName, logFileList) {
   let fileContents = `# ${categoryName}\n\n`;
   if (logFileList) {
     // TODO: build list of files in reverse date order
-    logFileList.sort((a, b) => (b.name.localeCompare(a)));
+    logFileList.sort((a, b) => (b.name.localeCompare(a.name)));
     logFileList.forEach((file) => {
       fileContents += `* [${path.basename(file.name, '.md')}](${file.name})\n`;
     });
@@ -196,8 +194,7 @@ export function buildMainIndexFile(title, categoryList) {
   // build header with category name
   let fileContents = `# ${title}\n\n`;
   if (categoryList) {
-    // TODO: build list of files in reverse date order
-    categoryList.sort((a, b) => (b.name.localeCompare(a)));
+    categoryList.sort((a, b) => (a.name.localeCompare(b.name)));
     categoryList.forEach((category) => {
       fileContents += `* [${category.name}](${category.directoryName}/index.md)\n`;
     });

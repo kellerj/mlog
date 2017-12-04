@@ -24,6 +24,7 @@
 
 ### Planned Features
 
+- [ ] Prevent duplicate category addition
 - [ ] Add entry (via editor)
 - [ ] list entries in category with date range
 - [ ] move entry
