@@ -49,16 +49,8 @@ commander.command('set <optionName> <optionValue>').action(handleSetValue);
 commander.command('add <listOptionName> <optionValue>').action(handleAddListValue);
 commander.command('show').action(handleShowOptions);
 
-// LOG('*****\nCOMMAND INPUT:\n*****');
-// LOG(commander);
-
-// config.getConfig();
-
-// const logLocation = commander.args[0];
-
 try {
   commander.parse(process.argv);
-  // if ( !commander.set && !commander.add)
 } catch (e) {
   process.stderr.write('\n');
   process.stderr.write(chalk.red(e.message));

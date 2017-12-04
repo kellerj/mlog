@@ -64,18 +64,30 @@ export function getCategoryName(categoryName) {
 }
 
 /**
+ * Create a file system name from a category name.
+ *
+ * @param {string} categoryName
+ * @returns {string}
+ */
+function convertCategoryNameToFileSystemName(categoryName) {
+  return categoryName.replace(/ /g, '_');
+}
+
+/**
  * getCategoryPath - Description
  *
- * @param {string} categoryName Description
- *
- * @returns {string} Description
+ * @param {string} categoryName
+ * @returns {string}
  */
 export function getCategoryPath(categoryName) {
   if (!categoryName) {
     categoryName = getCategoryName(categoryName);
   }
   // build the path for the given category
-  const categoryPath = path.join(getConfig().mlogLocation, categoryName.replace(/ /g, '_'));
+  const categoryPath = path.join(
+    getConfig().mlogLocation,
+    convertCategoryNameToFileSystemName(categoryName),
+  );
   // test that it exists and is writable
   if (!fs.existsSync(categoryPath)) {
     fs.mkdirSync(categoryPath);
@@ -167,6 +179,48 @@ export function generateCategoryIndexPage(categoryName) {
   const indexFileName = path.join(categoryPath, 'index.md');
   // console.log(`Generating file with parameters: ${categoryName} / ${JSON.stringify(fileList)}`);
   fs.writeFileSync(indexFileName, buildCategoryIndexFile(categoryName, fileList));
+  return indexFileName;
+}
+
+/**
+ * Builds the markdown index file contents from a list of categories.
+ *
+ * @param {string} title - Category name for which to regenerate the index.
+ * @param {Object[]} categoryList - List of categories which have files
+ * @param {string} categoryList[].name
+ * @param {string} categoryList[].directoryName
+ *
+ * @returns {string} The contents of the index file
+ */
+export function buildMainIndexFile(title, categoryList) {
+  // build header with category name
+  let fileContents = `# ${title}\n\n`;
+  if (categoryList) {
+    // TODO: build list of files in reverse date order
+    categoryList.sort((a, b) => (b.name.localeCompare(a)));
+    categoryList.forEach((category) => {
+      fileContents += `* [${category.name}](${category.directoryName}/index.md)\n`;
+    });
+  }
+  fileContents += `\n\n> Generated at: ${new Date()}`;
+  LOG(fileContents);
+  return fileContents;
+}
+
+/**
+ * Creates or updates the index file for the current set of categories in the config.
+ *
+ * @returns {string} Path to the file just created/updated.
+ */
+export function generateMainIndexPage() {
+  const categoryList = getConfig().categories.map(cat => ({
+    name: cat,
+    directoryName: convertCategoryNameToFileSystemName(cat),
+  }));
+  LOG(`Found Categories: ${categoryList}`);
+  // save the file
+  const indexFileName = path.join(getConfig().mlogLocation, 'index.md');
+  fs.writeFileSync(indexFileName, buildMainIndexFile(getConfig().title, categoryList));
   return indexFileName;
 }
 

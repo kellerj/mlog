@@ -5,21 +5,21 @@
 ### Initial Release (1.0.0)
 
 - [x] Accept input piped into command and save in appropriate location
-- [ ] command line setting for configuration options
+- [x] command line setting for configuration options
     - [x] Storage location
         - [x] Check if path exists
         - [x] create directory if not
         - [x] Create default config file if not exists
-    - [ ] options (`mlog option --set <name> <value>`)
+    - [x] options (`mlog option --set <name> <value>`)
         - [x] show (js-object-pretty-print?, yamprint?)
         - [x] add (to list option)
         - [x] set
         - [x] save to JSON file in target location
 - [x] exit out unless storage location set
 - [x] mlog-open command to open the mlogDirectory
-- [ ] generate index files
+- [x] generate index files
     - [x] Per category indexes
-    - [ ] list of categories
+    - [x] list of categories
 - [x] json config file in storage location
 
 ### Planned Features

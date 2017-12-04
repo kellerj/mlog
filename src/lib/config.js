@@ -10,7 +10,11 @@ const LOG = debug('mlog:lib:config');
 const knownListOptions = ['categories'];
 const knownStringOptions = ['defaultCategory', 'fileNameFormat', 'title'];
 
-
+/**
+ * Returns the absolute path for the home path.
+ *
+ * @return {string}
+ */
 function getConfigFileLocation() {
   return path.format({ dir: os.homedir(), base: '.mlog-config.json' });
 }
