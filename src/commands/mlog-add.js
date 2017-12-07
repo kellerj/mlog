@@ -4,7 +4,7 @@ import debug from 'debug';
 import commander from 'commander';
 import chalk from 'chalk';
 
-import { importLogEntry, getCategoryName, getEntryDate } from '../lib/main';
+import { importLogEntry, getCategoryName, getEntryDate, generateCategoryIndexPage } from '../lib/main';
 
 const LOG = debug('mlog:commands:add');
 
@@ -42,10 +42,12 @@ try {
       // write file to indicated path
       try {
         const logFile = importLogEntry(data, categoryName, entryDate, overwriteExisting);
-        console.log(chalk.green(`Saved Log to ${logFile}`));
-        // TODO: regenerate category index
+        process.stdout.write(chalk.green(`Saved Log to ${logFile}\n`));
+        // regenerate category index
+        generateCategoryIndexPage(categoryName);
       } catch (e) {
-        console.log(chalk.red(e.message));
+        process.stderr.write(chalk.red(e.message));
+        process.stderr.write('\n');
         process.exitCode = 1;
       }
     });
@@ -55,6 +57,7 @@ try {
     process.exitCode = 1;
   }
 } catch (e) {
-  console.log(chalk.red(e.message));
+  process.stderr.write(chalk.red(e.message));
+  process.stderr.write('\n');
   process.exitCode = 1;
 }
