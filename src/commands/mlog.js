@@ -5,6 +5,9 @@ import commander from 'commander';
 
 const LOG = debug('mlog');
 
+// Set logbook files to be only accessible by the current user
+process.umask(0o077);
+
 commander
   .version(require('../../package.json').version)
   .usage('<command> [options]')

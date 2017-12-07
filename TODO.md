@@ -40,6 +40,9 @@
     - [ ] use of JSON storage of object when encrypted?
         - [ ] metadata like title and date in wrapper
         - [ ] base-64-encoded content?
+- [ ] Move the umask to the logbook config file and set when pulling the config
+    - [ ] Also set the umask on the config file when changing the value
+    - [ ] Verify that there is no mask on the user bits
 
 ## Notes
 
