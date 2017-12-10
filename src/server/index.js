@@ -5,13 +5,12 @@
  */
 
 const app = require('./app');
-const debug = require('debug')('tt:server');
+const LOG = require('debug')('tt:server');
 const http = require('http');
 
 /**
  * Normalize a port into a number, string, or false.
  */
-
 function normalizePort(val) {
   const portInt = parseInt(val, 10);
 
@@ -28,11 +27,9 @@ function normalizePort(val) {
   return false;
 }
 
-
 /**
  * Create HTTP server.
  */
-
 const server = http.createServer(app);
 
 /**
@@ -71,19 +68,17 @@ function onError(error) {
 /**
  * Event listener for HTTP server "listening" event.
  */
-
 function onListening() {
   const addr = server.address();
   const bind = typeof addr === 'string'
     ? `pipe ${addr}`
     : `port ${addr.port}`;
-  debug(`Listening on ${bind}`);
+  LOG(`Listening on ${bind}`);
 }
 
 /**
  * Listen on provided port, on all network interfaces.
  */
-
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
