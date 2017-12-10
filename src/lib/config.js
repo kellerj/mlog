@@ -128,7 +128,7 @@ export function getConfig() {
  * updates a string-value type config property and returns the updated object
  * @param  {string} optionName
  * @param  {string} optionValue
- * @return {[type]}             a copy of the config object with the update in place.
+ * @return {Object}             a copy of the config object with the update in place.
  */
 export function updateStringConfig(optionName, optionValue) {
   // update the config
@@ -143,7 +143,7 @@ export function updateStringConfig(optionName, optionValue) {
  * updates a string-list-value type config property and returns the updated object
  * @param  {string} optionName
  * @param  {string} optionValue
- * @return {[type]}             a copy of the config object with the update in place.
+ * @return {Object}             a copy of the config object with the update in place.
  */
 export function addToListConfig(optionName, optionValue) {
   // update the config
