@@ -16,8 +16,6 @@ const LOG = require('debug')('tt:server');
 const config = getConfig();
 
 // view engine setup
-// app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
 app.engine('md', (filePath, options, callback) => {
   LOG(`Reading: ${filePath}`);
   fs.readFile(filePath, 'utf8', (err, mdData) => {
@@ -26,7 +24,19 @@ app.engine('md', (filePath, options, callback) => {
       if (err2) {
         throw err2;
       }
-      return callback(null, renderedContent);
+      const html = `<!DOCTYPE html>
+      <html>
+        <head>
+          <title>TODO: PAGE TITLE</title>
+          <link rel="stylesheet" href="/style.css" />
+        </head>
+        <body>
+          ${renderedContent}
+        </body>
+      </html>
+      `;
+
+      return callback(null, html);
     });
   });
 });
