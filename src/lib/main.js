@@ -1,7 +1,7 @@
 /**
  * @overview Functions related to the main functionality of
  * maintaining the logbook files and strucutre.
- * @module lib/main
+ * @module main
  * @author Jonathan Keller
  */
 import debug from 'debug';
@@ -36,11 +36,12 @@ export function getEntryDate(entryDateString) {
 }
 
 /**
- * getCategoryName - Description
+ * Get the category name normalized to that in the configuration file.
+ * If an empty name is passed, then return the default category.
  *
- * @param {string} categoryName Description
+ * @param {string} categoryName
  *
- * @returns {string} Description
+ * @returns {string} The normalized category name or default category name.
  */
 export function getCategoryName(categoryName) {
   let adjustedCategoryName = categoryName;

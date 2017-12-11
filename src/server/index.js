@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
 /**
- * Module dependencies.
+ * @file Server startup script.
+ * @author Jonathan Keller
  */
-
 const app = require('./app');
 const LOG = require('debug')('tt:server');
 const http = require('http');

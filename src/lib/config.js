@@ -1,3 +1,8 @@
+/**
+ * @overview Logbook configuration support methods
+ * @module config
+ * @author Jonathan Keller
+ */
 import debug from 'debug';
 import fs from 'fs';
 import os from 'os';
@@ -9,6 +14,17 @@ const LOG = debug('mlog:lib:config');
 
 const knownListOptions = ['categories'];
 const knownStringOptions = ['defaultCategory', 'fileNameFormat', 'title'];
+
+/**
+ * Logbook configuration object
+ * @typedef LogbookConfig
+ * @type {object}
+ * @property {string}   defaultCategory - The category to use if no category is specified on the command line.
+ * @property {string}   fileNameFormat  - the Date format string to use on entry date given.
+ * @property {string}   title           - The title of this logbook.
+ * @property {string}   mlogLocation    - the absolute path of the logbook
+ * @property {string[]} categories      - array of valid categories which can be specified
+ */
 
 /**
  * Returns the absolute path for the home path.
@@ -41,6 +57,11 @@ export function validateListOptionName(optionName) {
   return knownListOptions.includes(optionName);
 }
 
+/**
+ * Prepare the directory for the entire logbook.
+ *
+ * @param  {string} logLocation - The absolute path of the location to prepare.
+ */
 export function prepareDirectory(logLocation) {
   // Check that given location exists (or can be created) and is writable
 
@@ -71,6 +92,12 @@ export function prepareDirectory(logLocation) {
   }
 }
 
+/**
+ * Write out the system-level configuration file pointed at the given directory.
+ *
+ * @param  {string} logLocation - The absolute path of the logbook directory.
+ * @return {string}             Absolute path to the created configuration file.
+ */
 export function writeHomeConfig(logLocation) {
   // Create the home directory config file to keep track of where the logbook is
   const configFileLocation = getConfigFileLocation();
@@ -84,12 +111,7 @@ export function writeHomeConfig(logLocation) {
  * Get the current configuration for the application based on the logbook
  * location stored in the home directory and the configuration file stored
  * in that location.
- * @return {Object}   config - the configuration object for the application
- * @return {string}   config.defaultCategory - The category to use if no category is specified on the command line.
- * @return {string}   config.fileNameFormat - the Date format string to use on entry date given.
- * @return {string}   config.title - The title of this logbook.
- * @return {string}   config.mlogLocation - the absolute path of the logbook
- * @return {string[]} config.categories - array of valid categories which can be specified
+ * @return {LogbookConfig} - the configuration object for the application
  */
 export function getConfig() {
   // check if the global config has been loaded, and return that if present
@@ -129,7 +151,7 @@ export function getConfig() {
  * updates a string-value type config property and returns the updated object
  * @param  {string} optionName
  * @param  {string} optionValue
- * @return {Object}             a copy of the config object with the update in place.
+ * @return {LogbookConfig}             a copy of the config object with the update in place.
  */
 export function updateStringConfig(optionName, optionValue) {
   // update the config
@@ -144,7 +166,7 @@ export function updateStringConfig(optionName, optionValue) {
  * updates a string-list-value type config property and returns the updated object
  * @param  {string} optionName
  * @param  {string} optionValue
- * @return {Object}             a copy of the config object with the update in place.
+ * @return {LogbookConfig}             a copy of the config object with the update in place.
  */
 export function addToListConfig(optionName, optionValue) {
   // update the config
@@ -158,7 +180,7 @@ export function addToListConfig(optionName, optionValue) {
 /**
  * Save the logbook configuration file based on the current config in memory.
  *
- * @param  {string} configObject
+ * @param  {LogbookConfig} configObject
  */
 export function saveLogbookConfig(configObject) {
   const logLocation = getConfig().mlogLocation;
@@ -183,3 +205,5 @@ export function prepareLogbookConfig(logLocation) {
   }
   return logbookConfigFile;
 }
+
+export default {};

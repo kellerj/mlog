@@ -15,8 +15,10 @@
     "preversion": "npm run lint && npm test",
     "version": "git add src",
     "postversion": "git push && git push --tags",
-    "mlog": "DEBUG=*,-babel node -r babel-register src/commands/mlog.js",
-    "mlog-init": "DEBUG=*,-babel node -r babel-register src/commands/mlog-init.js"
+    "mlog": "DEBUG=mlog:* node -r babel-register src/commands/mlog.js",
+    "mlog-init": "DEBUG=mlog:* node -r babel-register src/commands/mlog-init.js",
+    "server": "DEBUG=mlog:* nodemon -r babel-register -w src/server src/server/index.js",
+    "doc": "jsdoc -r --private -d doc --readme README.md src"
   },
   "author": {
     "name": "Jonathan Keller",
