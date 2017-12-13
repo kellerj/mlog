@@ -14,6 +14,7 @@ const LOG = debug('mlog:lib:config');
 
 const knownListOptions = ['categories'];
 const knownStringOptions = ['defaultCategory', 'fileNameFormat', 'title'];
+const knownIntegerOptions = ['serverPort'];
 
 /**
  * Logbook configuration object
@@ -43,7 +44,7 @@ function getConfigFileLocation() {
  * @return {boolean}
  */
 export function validateStringOptionName(optionName) {
-  return knownStringOptions.includes(optionName);
+  return knownStringOptions.includes(optionName) || knownIntegerOptions.includes(optionName);
 }
 
 /**
@@ -155,7 +156,11 @@ export function getConfig() {
  */
 export function updateStringConfig(optionName, optionValue) {
   // update the config
-  getConfig()[optionName] = optionValue;
+  if (knownIntegerOptions.includes(optionName)) {
+    getConfig()[optionName] = Number.parseInt(optionValue, 10);
+  } else {
+    getConfig()[optionName] = optionValue;
+  }
   const newConfig = Object.assign({}, getConfig());
   // make a copy, and remove the mlogLocation
   delete newConfig.mlogLocation;
