@@ -30,18 +30,28 @@
 - [ ] move entry
 - [ ] display entry - with option to render to HTML and open in browser
 - [ ] edit entry
+- [ ] Support for linked images?
 - [ ] set Editor command
 - [ ] set view command
-- [ ] local HTTP server with rendered contents
+    - [ ] e.g., marked
+    - [ ] Option to view as HTML rendered instead of app (view method?)
+        - [ ] render as HTML file in temp directory
+        - [ ] open HTML file in default browser
+- [x] local HTTP server with rendered contents
 - [ ] entry encryption (for when entry file stored on cloud service like dropbox)
     - [ ] option on per-entry basis or globally
-    - [ ] storage of key in home dir config file
+        - [ ] extension change on encrypted entries?
+    - [ ] storage of key in home dir config file (base-64)
+    - [ ] command to generate key - tell user where it is so can be backed up
+    - [ ] command to set encryption key
     - [ ] use of JSON storage of object when encrypted?
         - [ ] metadata like title and date in wrapper
         - [ ] base-64-encoded content?
 - [ ] Move the umask to the logbook config file and set when pulling the config
     - [ ] Also set the umask on the config file when changing the value
     - [ ] Verify that there is no mask on the user bits
+    - [ ] Validate that the umask is valid (how?)
+    - [ ] Validate that the umask will not lock the application out (e.g., no mask on the user bits)
 
 ## Notes
 
@@ -55,6 +65,7 @@
     ],
     "defaultCategory" : "Work Log",
     "fileNameFormat" : "YYYY-MM-DD",
-    "title" : "Logbook"
+    "title" : "Logbook",
+    "serverPort" : 3000
 }
 ```
