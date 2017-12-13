@@ -4,28 +4,12 @@
  * @file Server startup script.
  * @author Jonathan Keller
  */
-const app = require('./app');
-const LOG = require('debug')('tt:server');
-const http = require('http');
+import chalk from 'chalk';
+import http from 'http';
 
-/**
- * Normalize a port into a number, string, or false.
- */
-function normalizePort(val) {
-  const portInt = parseInt(val, 10);
+// const LOG = require('debug')('tt:server');
 
-  if (Number.isNaN(portInt)) {
-    // named pipe
-    return val;
-  }
-
-  if (portInt >= 0) {
-    // port number
-    return portInt;
-  }
-
-  return false;
-}
+import app from './app';
 
 /**
  * Create HTTP server.
@@ -35,7 +19,7 @@ const server = http.createServer(app);
 /**
  * Get port from environment and store in Express.
  */
-const port = normalizePort(process.env.PORT || '3000');
+const port = process.env.PORT || '3000';
 app.set('port', port);
 
 /**
@@ -46,20 +30,12 @@ function onError(error) {
     throw error;
   }
 
-  const bind = typeof port === 'string'
-    ? `Pipe ${port}`
-    : `Port ${port}`;
-
   // handle specific listen errors with friendly messages
   switch (error.code) {
     case 'EACCES':
-      console.error(`${bind} requires elevated privileges`);
-      process.exit(1);
-      break;
+      throw new Error(`Port ${port} requires elevated privileges`);
     case 'EADDRINUSE':
-      console.error(`${bind} is already in use`);
-      process.exit(1);
-      break;
+      throw new Error(`Port ${port} is already in use`);
     default:
       throw error;
   }
@@ -70,15 +46,12 @@ function onError(error) {
  */
 function onListening() {
   const addr = server.address();
-  const bind = typeof addr === 'string'
-    ? `pipe ${addr}`
-    : `port ${addr.port}`;
-  LOG(`Listening on ${bind}`);
+  process.stdout.write(chalk.green(`Server Up and Listening on http://${addr.address}:${addr.port}\n`));
 }
 
 /**
  * Listen on provided port, on all network interfaces.
  */
-server.listen(port);
+server.listen(port, '127.0.0.1');
 server.on('error', onError);
 server.on('listening', onListening);

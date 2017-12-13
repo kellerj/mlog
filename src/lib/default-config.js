@@ -6,4 +6,5 @@ module.exports = {
   defaultCategory: 'Work Log',
   fileNameFormat: 'YYYY-MM-DD',
   title: 'Logbook',
+  serverPort: 3000,
 };
