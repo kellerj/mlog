@@ -29,13 +29,25 @@ app.engine('md', (filePath, options, callback) => {
         throw err2;
       }
       const html = `<!DOCTYPE html>
-      <html>
+      <html lang="en">
         <head>
           <title>TODO: PAGE TITLE</title>
-          <link rel="stylesheet" href="/style.css" />
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+          <link rel="stylesheet" href="/bootstrap.css" />
+          <!-- <link rel="stylesheet" href="/style.css" /> -->
         </head>
         <body>
-          ${renderedContent}
+          <div class="container">
+            ${renderedContent}
+          </div>
+          <script src="/jquery-3.2.1.slim.min.js"></script>
+          <script>
+            $('.container').find('table').addClass('table table-sm table-striped');
+            $('.container').find('ul').addClass('list-group');
+            $('.container').find('li').addClass('list-group-item');
+            $('.container').find('li > ul > li').addClass('list-group-item-secondary');
+          </script>
         </body>
       </html>
       `;
