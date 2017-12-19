@@ -75,9 +75,10 @@
   },
   "nyc": {
     "exclude": [
-      "src/commands/**",
-      "coverage/**",
-      "test/**"
+      "src/commands/**"
+    ],
+    "include": [
+      "src/**"
     ],
     "check-coverage": false,
     "lines": 90,

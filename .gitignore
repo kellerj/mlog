@@ -7,4 +7,3 @@ yarn.lock
 /logbook
 /*.tgz
 /doc
-*.css
