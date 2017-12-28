@@ -175,6 +175,7 @@ export function generateCategoryIndexPage(categoryName) {
   const fileList = fileNameList.filter(file => (file !== 'index.md')).map(file => ({ name: file }));
   // save the file
   const indexFileName = path.join(categoryPath, 'index.md');
+  LOG(`Writing Index File: ${indexFileName}`);
   // LOG(`Generating file with parameters: ${categoryName} / ${JSON.stringify(fileList)}`);
   fs.writeFileSync(indexFileName, buildCategoryIndexFile(categoryName, fileList));
   return indexFileName;
@@ -217,6 +218,7 @@ export function generateMainIndexPage() {
   LOG(`Found Categories: ${categoryList}`);
   // save the file
   const indexFileName = path.join(getConfig().mlogLocation, 'index.md');
+  LOG(`Writing Index File: ${indexFileName}`);
   fs.writeFileSync(indexFileName, buildMainIndexFile(getConfig().title, categoryList));
   return indexFileName;
 }
