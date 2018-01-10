@@ -7,3 +7,4 @@ yarn.lock
 /logbook
 /*.tgz
 /doc
+/dist

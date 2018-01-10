@@ -18,7 +18,9 @@
     "mlog": "DEBUG=mlog:* node -r babel-register src/commands/mlog.js",
     "mlog-init": "DEBUG=mlog:* node -r babel-register src/commands/mlog-init.js",
     "server": "DEBUG=mlog:* nodemon -r babel-register -w src/server src/server/index.js",
-    "doc": "jsdoc -r --private -d doc --readme README.md src"
+    "doc": "jsdoc -r --private -d doc --readme README.md src",
+    "prepare": "babel -d dist/ src",
+    "watch": "babel --watch -d dist/ src"
   },
   "author": {
     "name": "Jonathan Keller",
@@ -30,11 +32,7 @@
     "url": "https://github.com/kellerj/mlog.git"
   },
   "bin": {
-    "mlog": "./src/commands/mlog.js",
-    "mlog-add": "./src/commands/mlog-add.js",
-    "mlog-init": "./src/commands/mlog-init.js",
-    "mlog-open": "./src/commands/mlog-open.js",
-    "mlog-config": "./src/commands/mlog-config.js"
+    "mlog": "./dist/commands/mlog.js"
   },
   "files": [
     "src"
