@@ -38,9 +38,6 @@
     "src"
   ],
   "dependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
-    "babel-register": "^6.26.0",
     "body-parser": "^1.18.2",
     "chalk": "^2.3.0",
     "commander": "^2.11.0",
@@ -55,11 +52,13 @@
     "opn": "^5.1.0",
     "serve-favicon": "^2.4.5",
     "sprintf-js": "^1.1.1",
-    "supports-color": "^5.0.0",
     "yamprint": "^0.5.7",
     "yamprint-ansi-color": "^0.5.2"
   },
   "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-register": "^6.26.0",
     "chai": "^4.1.2",
     "coveralls": "^3.0.0",
     "eslint": "^4.10.0",

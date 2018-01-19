@@ -8,3 +8,4 @@ yarn.lock
 /*.tgz
 /doc
 /dist
+/src/server/public/style.css
