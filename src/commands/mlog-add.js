@@ -3,6 +3,7 @@
 import debug from 'debug';
 import commander from 'commander';
 import chalk from 'chalk';
+import opn from 'opn';
 
 import { importLogEntry, getCategoryName, getEntryDate, generateCategoryIndexPage } from '../lib/main';
 
@@ -12,6 +13,8 @@ commander.usage('[options]')
   .option('-c, --category <categoryName>', 'Category to which to add the given content.')
   .option('-d, --date <YYYY-MM-DD>', 'Date to use for the entry.  Today\'s date will be used if not specified.')
   .option('-o, --overwrite', 'If an entry already exists for this date, replace it.')
+  .option('--open', 'After creating the entry, open the file with the default viewer on your platform.')
+  .option('--echo', 'After saving the entry, echo the contents back to the console.')
   .parse(process.argv);
 
 LOG('*****\nCOMMAND INPUT:\n*****');
@@ -45,6 +48,14 @@ try {
         process.stdout.write(chalk.green(`Saved Log to ${logFile}\n`));
         // regenerate category index
         generateCategoryIndexPage(categoryName);
+        if (commander.echo) {
+          process.stdout.write('-'.repeat(80));
+          process.stderr.write('\n');
+          process.stdout.write(data);
+        }
+        if (commander.open) {
+          opn(logFile, { wait: false });
+        }
       } catch (e) {
         process.stderr.write(chalk.red(e.message));
         process.stderr.write('\n');
