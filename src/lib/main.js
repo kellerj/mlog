@@ -134,6 +134,21 @@ export function importLogEntry(entryText, categoryName, entryDateString, overwri
 }
 
 /**
+ * if the first line starts with #, parse everything after # and whitespace
+ * @param  {string} fileContents Contents of the markdown file for parsing.
+ * @param  {string} fileName     Name of the file, used for fallback if the title is not found.
+ * @return {string}              The title from the first line of the markdown document.
+ */
+export function getMarkdownPageTitle(fileContents, fileName) {
+  const headerRegexp = /^#+\s*(.+)$/m;
+  const title = headerRegexp.exec(fileContents.split('\n')[0]);
+  if (title) {
+    return title[1].trim();
+  }
+  return path.basename(fileName, '.md');
+}
+
+/**
  * buildCategoryIndexFile - Builds the markdown category index file contents from a list of files.
  *
  * @param {string} categoryName - Category name for which to regenerate the index.
@@ -149,7 +164,7 @@ export function buildCategoryIndexFile(categoryName, logFileList) {
     // TODO: build list of files in reverse date order
     logFileList.sort((a, b) => (b.name.localeCompare(a.name)));
     logFileList.forEach((file) => {
-      fileContents += `* [${path.basename(file.name, '.md')}](${file.name})\n`;
+      fileContents += `* [${file.title}](${file.name})\n`;
     });
     // TODO: pull the header from the file and use as the link label?
   }
@@ -174,7 +189,13 @@ export function generateCategoryIndexPage(categoryName) {
   const fileNameList = fs.readdirSync(categoryPath);
   LOG(`Found Files: ${fileNameList}`);
   const markdownFileList = fileNameList.filter(file => file.endsWith('.md') && file !== 'index.md');
-  const fileList = markdownFileList.map(file => ({ name: file }));
+  const fileList = markdownFileList.map((file) => {
+    const fileContents = fs.readFileSync(path.join(categoryPath, file), 'utf8');
+    return {
+      name: file,
+      title: getMarkdownPageTitle(fileContents, file),
+    };
+  });
   // save the file
   const indexFileName = path.join(categoryPath, 'index.md');
   LOG(`Writing Index File: ${indexFileName}`);

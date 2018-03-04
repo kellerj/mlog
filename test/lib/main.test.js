@@ -154,9 +154,9 @@ context('lib/main', () => {
       fs.writeFileSync(path.join(categoryPath, '2017-09-30.md'), '# Test File 3');
       const indexFile = main.generateCategoryIndexPage('Work Log');
       expect(fs.readFileSync(indexFile, 'utf8')).to.equal(main.buildCategoryIndexFile('Work Log', [
-        { name: '2017-09-28.md' },
-        { name: '2017-09-29.md' },
-        { name: '2017-09-30.md' },
+        { name: '2017-09-28.md', title: 'Test File 1' },
+        { name: '2017-09-29.md', title: 'Test File 2' },
+        { name: '2017-09-30.md', title: 'Test File 3' },
       ]));
     });
     it('should not include the index file', () => {
@@ -186,9 +186,9 @@ context('lib/main', () => {
       const result = main.buildCategoryIndexFile(
         'Work Log',
         [
-          { name: '2017-09-28.md' },
-          { name: '2017-09-29.md' },
-          { name: '2017-09-30.md' },
+          { name: '2017-09-28.md', title: '2017-09-28' },
+          { name: '2017-09-29.md', title: '2017-09-29' },
+          { name: '2017-09-30.md', title: '2017-09-30' },
         ],
       );
       expect(result.split('\n')[0]).to.match(/^# .*Work Log.*/);
@@ -197,9 +197,9 @@ context('lib/main', () => {
       const result = main.buildCategoryIndexFile(
         'Work Log',
         [
-          { name: '2017-09-28.md' },
-          { name: '2017-09-29.md' },
-          { name: '2017-09-30.md' },
+          { name: '2017-09-28.md', title: '2017-09-28' },
+          { name: '2017-09-29.md', title: '2017-09-29' },
+          { name: '2017-09-30.md', title: '2017-09-30' },
         ],
       );
       expect(result).to.match(/\[2017-09-28\]\(2017-09-28\.md\)/);
@@ -210,12 +210,24 @@ context('lib/main', () => {
       const result = main.buildCategoryIndexFile(
         'Work Log',
         [
-          { name: '2017-09-28.md' },
-          { name: '2017-09-29.md' },
-          { name: '2017-09-30.md' },
+          { name: '2017-09-28.md', title: '2017-09-28' },
+          { name: '2017-09-29.md', title: '2017-09-29' },
+          { name: '2017-09-30.md', title: '2017-09-30' },
         ],
       );
       expect(result).to.match(/2017-09-30(.|[\s\S])*?2017-09-29(.|[\s\S])*?2017-09-28/m);
+    });
+  });
+
+  describe('#getMarkdownPageTitle', () => {
+    it('should return right string when parsable', () => {
+      expect(main.getMarkdownPageTitle('# The Title\n\nMore Text', 'fileName.md')).to.equal('The Title', 'Parsing Failed for: "# The Title"');
+      expect(main.getMarkdownPageTitle('#   The Title  \n\nMore Text', 'fileName.md')).to.equal('The Title', 'Parsing Failed for: "#   The Title  "');
+      expect(main.getMarkdownPageTitle('## The Title\n\nMore Text', 'fileName.md')).to.equal('The Title', 'Parsing Failed for: "## The Title"');
+      expect(main.getMarkdownPageTitle('#The Title\n\nMore Text', 'fileName.md')).to.equal('The Title', 'Parsing Failed for: "#The Title"');
+    });
+    it('should return the name of the file without the extension if can\'t parse the first line', () => {
+      expect(main.getMarkdownPageTitle('No Header On First Line', 'fileName.md')).to.equal('fileName');
     });
   });
 });
