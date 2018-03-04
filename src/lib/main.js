@@ -173,7 +173,8 @@ export function generateCategoryIndexPage(categoryName) {
   LOG(`Scanning CategoryPath: ${categoryPath}`);
   const fileNameList = fs.readdirSync(categoryPath);
   LOG(`Found Files: ${fileNameList}`);
-  const fileList = fileNameList.filter(file => (file !== 'index.md')).map(file => ({ name: file }));
+  const markdownFileList = fileNameList.filter(file => file.endsWith('.md') && file !== 'index.md');
+  const fileList = markdownFileList.map(file => ({ name: file }));
   // save the file
   const indexFileName = path.join(categoryPath, 'index.md');
   LOG(`Writing Index File: ${indexFileName}`);

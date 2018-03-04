@@ -66,6 +66,7 @@
     "eslint-plugin-import": "^2.8.0",
     "istanbul": "^0.4.5",
     "mocha": "^4.0.1",
+    "nodemon": "^1.17.1",
     "nyc": "^11.2.1",
     "sinon": "^4.0.2",
     "tmp": "^0.0.33"
