@@ -3,13 +3,17 @@
  * @author Jonathan Keller
  */
 import express from 'express';
-import path from 'path';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import logger from 'morgan';
-import fs from 'fs';
-import marked from 'marked';
+import fs from 'node:fs';
+import { marked } from 'marked';
 import debug from 'debug';
 
-import { getConfig } from '../lib/config';
+import { getConfig } from '../lib/config.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const LOG = debug('tt:server');
 
@@ -20,11 +24,12 @@ const config = getConfig();
 app.engine('md', (filePath, options, callback) => {
   LOG(`Reading: ${filePath}`);
   fs.readFile(filePath, 'utf8', (err, mdData) => {
+    if (err) {
+      return callback(err);
+    }
     LOG(`Original Markdown Text: \n${mdData}`);
-    marked(mdData, (err2, renderedContent) => {
-      if (err2) {
-        throw err2;
-      }
+    try {
+      const renderedContent = marked(mdData);
       const html = `<!DOCTYPE html>
       <html lang="en">
         <head>
@@ -49,7 +54,9 @@ app.engine('md', (filePath, options, callback) => {
       `;
 
       return callback(null, html);
-    });
+    } catch (markErr) {
+      return callback(markErr);
+    }
   });
 });
 app.set('views', [config.mlogLocation, path.join(__dirname, 'views')]);
@@ -59,14 +66,9 @@ app.set('strict routing', false);
 app.use(logger('dev'));
 app.use(express.static(path.join(__dirname, 'public')));
 
-/* GET home page. */
-// app.get('/', (req, res, next) => { // eslint-disable-line no-unused-vars
-//   res.render('index');
-// });
-
-app.get('/*', (req, res, next) => { // eslint-disable-line no-unused-vars
+app.get('/*', (req, res, _next) => {
   LOG(req.path);
-  res.render(req.path.substr(1));
+  res.render(req.path.substring(1));
 });
 
 // catch 404 and forward to error handler
@@ -77,12 +79,10 @@ app.use((req, res, next) => {
 });
 
 // error handler
-app.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
-  // set locals, only providing error in development
+app.use((err, req, res, _next) => {
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
   res.status(err.status || 500);
   res.render('error.ejs');
 });

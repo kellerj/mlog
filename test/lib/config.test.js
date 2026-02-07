@@ -1,25 +1,24 @@
 import { expect } from 'chai';
-import { stub, spy } from 'sinon';
-import os from 'os';
-import fs from 'fs';
+import sinon from 'sinon';
+import os from 'node:os';
+import fs from 'node:fs';
 import tmp from 'tmp';
-import path from 'path';
+import path from 'node:path';
 
-import * as config from '../../src/lib/config';
-import defaultConfig from '../../src/lib/default-config';
+import * as config from '../../src/lib/config.js';
+import defaultConfig from '../../src/lib/default-config.js';
 
 describe('lib/config', () => {
   let tempDir = { name: path.format({ dir: process.cwd(), base: 'temp' }) };
   let homeDir = path.format({ dir: tempDir.name, base: 'home' });
   let parentDir = path.format({ dir: tempDir.name, base: 'parent' });
 
-  // create and remove a temp directory for each test to test the various scenarios
   beforeEach(() => {
     tempDir = tmp.dirSync({ unsafeCleanup: true });
     homeDir = path.format({ dir: tempDir.name, base: 'home' });
     parentDir = path.format({ dir: tempDir.name, base: 'parent' });
     fs.mkdirSync(homeDir);
-    stub(os, 'homedir').returns(homeDir);
+    sinon.stub(os, 'homedir').returns(homeDir);
   });
 
   afterEach(() => {
@@ -68,14 +67,12 @@ describe('lib/config', () => {
 
     it('should abort if the parent of the path given does not exist', () => {
       const logbookPath = path.format({ dir: parentDir, base: 'logbook' });
-
       expect(config.prepareDirectory.bind(config, logbookPath)).to.throw(`Parent Directory ${parentDir} does not exist.`);
     });
 
     it('should abort if the path exists and is not a directory', () => {
       const logbookPath = path.format({ dir: parentDir, base: 'logbook' });
       fs.mkdirSync(parentDir);
-
       fs.writeFileSync(logbookPath, 'JUST SOME JUNK DATA', 'utf8');
       expect(config.prepareDirectory.bind(config, logbookPath)).to.throw(`${logbookPath} already exists and is not a directory.`);
     });
@@ -84,13 +81,11 @@ describe('lib/config', () => {
       const logbookPath = path.format({ dir: parentDir, base: 'logbook' });
       fs.mkdirSync(parentDir);
       fs.mkdirSync(logbookPath);
-
       config.prepareDirectory(logbookPath);
     });
 
     it('should abort if the parent of the path given exists and is not a directory', () => {
       const logbookPath = path.format({ dir: parentDir, base: 'logbook' });
-
       fs.writeFileSync(parentDir, 'JUST SOME JUNK DATA', 'utf8');
       expect(config.prepareDirectory.bind(config, logbookPath)).to.throw(`Parent of log location ${parentDir} is not a directory.`);
     });
@@ -159,7 +154,7 @@ describe('lib/config', () => {
       homeDirConfigFile = config.writeHomeConfig(logbookPath);
       config.prepareDirectory(logbookPath);
       config.prepareLogbookConfig(logbookPath);
-      spy(fs, 'readFileSync');
+      sinon.spy(fs, 'readFileSync');
     });
 
     afterEach(() => {
@@ -167,7 +162,6 @@ describe('lib/config', () => {
       delete global.mlogLocation;
       fs.readFileSync.restore();
     });
-
 
     it('should read the logbook directory from the homeDir config file', () => {
       config.getConfig();

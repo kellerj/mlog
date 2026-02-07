@@ -1,10 +1,10 @@
-module.exports = {
+export default {
   categories: [
     'Work Log',
     'Weekly Summary',
   ],
   defaultCategory: 'Work Log',
-  fileNameFormat: 'YYYY-MM-DD',
+  fileNameFormat: 'yyyy-MM-dd',
   title: 'Logbook',
   serverPort: 3000,
 };

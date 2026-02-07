@@ -1,26 +1,20 @@
 {
   "name": "markdown-log",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Markdown Log Tracker",
-  "main": "commands/mlog.js",
+  "type": "module",
+  "main": "src/commands/mlog.js",
   "scripts": {
-    "lint": "eslint src --ext .js",
-    "test": "nyc mocha --require babel-register --reporter spec test/**/*.test.js",
-    "coveralls": "nyc report --reporter=text-lcov | coveralls",
-    "test:mocha": "mocha --require babel-register --reporter spec test/**/*.test.js",
-    "test:watch": "mocha --require babel-register --reporter min test/**/*.test.js --watch",
-    "mocha": "mocha --require babel-register",
-    "eslint": "eslint",
-    "nyc": "nyc",
+    "lint": "eslint src",
+    "test": "c8 mocha --reporter spec test/**/*.test.js",
+    "test:mocha": "mocha --reporter spec test/**/*.test.js",
+    "test:watch": "mocha --reporter min test/**/*.test.js --watch",
     "preversion": "npm run lint && npm test",
     "version": "git add src",
     "postversion": "git push && git push --tags",
-    "mlog": "node -r babel-register src/commands/mlog.js",
-    "mlog-debug": "DEBUG=mlog:* node -r babel-register src/commands/mlog.js",
-    "server": "DEBUG=mlog:* nodemon -r babel-register -w src/server src/server/index.js",
-    "doc": "jsdoc -r --private -d doc --readme README.md src",
-    "prepare": "babel -d dist/ src",
-    "watch": "babel --watch -d dist/ src"
+    "mlog": "node src/commands/mlog.js",
+    "mlog-debug": "DEBUG=mlog:* node src/commands/mlog.js",
+    "server": "DEBUG=mlog:* node --watch-path=src/server src/server/index.js"
   },
   "author": {
     "name": "Jonathan Keller",
@@ -32,46 +26,37 @@
     "url": "https://github.com/kellerj/mlog.git"
   },
   "bin": {
-    "mlog": "./dist/commands/mlog.js"
+    "mlog": "./src/commands/mlog.js"
   },
   "files": [
     "src"
   ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "dependencies": {
-    "body-parser": "^1.18.2",
-    "chalk": "^2.3.0",
-    "commander": "^2.11.0",
-    "cookie-parser": "^1.4.3",
-    "date-fns": "^1.29.0",
-    "debug": "^3.1.0",
-    "ejs": "^2.5.7",
-    "express": "^4.15.5",
-    "less-middleware": "^2.2.1",
-    "marked": "^0.3.7",
-    "morgan": "^1.9.0",
-    "opn": "^5.1.0",
-    "serve-favicon": "^2.4.5",
-    "sprintf-js": "^1.1.1",
-    "yamprint": "^0.5.7",
-    "yamprint-ansi-color": "^0.5.2"
+    "chalk": "^5.4.1",
+    "commander": "^13.1.0",
+    "date-fns": "^4.1.0",
+    "debug": "^4.4.0",
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "marked": "^15.0.7",
+    "morgan": "^1.10.0",
+    "open": "^10.1.0",
+    "serve-favicon": "^2.5.0"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
-    "babel-register": "^6.26.0",
-    "chai": "^4.1.2",
-    "coveralls": "^3.0.0",
-    "eslint": "^4.10.0",
-    "eslint-config-airbnb-base": "^12.1.0",
-    "eslint-plugin-import": "^2.8.0",
-    "istanbul": "^0.4.5",
-    "mocha": "^4.0.1",
-    "nodemon": "^1.17.1",
-    "nyc": "^11.2.1",
-    "sinon": "^4.0.2",
-    "tmp": "^0.0.33"
+    "@eslint/js": "^9.20.0",
+    "c8": "^10.1.3",
+    "chai": "^5.1.2",
+    "eslint": "^9.20.0",
+    "globals": "^15.14.0",
+    "mocha": "^11.1.0",
+    "sinon": "^19.0.2",
+    "tmp": "^0.2.3"
   },
-  "nyc": {
+  "c8": {
     "exclude": [
       "src/commands/**"
     ],
@@ -89,25 +74,6 @@
       "text",
       "html"
     ],
-    "watermarks": {
-      "lines": [
-        75,
-        90
-      ],
-      "functions": [
-        90,
-        100
-      ],
-      "branches": [
-        50,
-        75
-      ],
-      "statements": [
-        75,
-        90
-      ]
-    },
-    "cache": true,
     "all": true,
     "report-dir": "./coverage"
   }
