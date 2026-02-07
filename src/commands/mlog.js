@@ -1,15 +1,21 @@
 #!/usr/bin/env node
 
+import { createRequire } from 'node:module';
 import debug from 'debug';
-import commander from 'commander';
+import { Command } from 'commander';
+
+const require = createRequire(import.meta.url);
+const pkg = require('../../package.json');
 
 const LOG = debug('mlog');
 
 // Set logbook files to be only accessible by the current user
 process.umask(0o077);
 
-commander
-  .version(require('../../package.json').version)
+const program = new Command();
+
+program
+  .version(pkg.version)
   .usage('<command> [options]')
   .command('init <directory>', 'Initialize a new repository at the given location.')
   .command('config [command] [options]', 'Set configuration options for the current logbook.')
@@ -17,13 +23,7 @@ commander
   .command('open', 'Open the logbook directory in the file system browser.')
   .command('server [options]', 'Startup a web server to display the rendered markdown log entries.');
 
-commander.parse(process.argv);
+program.parse(process.argv);
 
 LOG('*****\nCOMMAND INPUT:\n*****');
-LOG(commander);
-
-if (!commander.runningCommand) {
-  LOG('No Child Process Running - Continuing');
-} else {
-  LOG(`Child Command Specified "${commander.args}" - Skipping Default Actions`);
-}
+LOG(program);

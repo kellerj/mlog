@@ -1,16 +1,12 @@
 #!/usr/bin/env node
 
-// import debug from 'debug';
-// import commander from 'commander';
 import chalk from 'chalk';
-import opn from 'opn';
+import open from 'open';
 
-import { getConfig } from '../lib/config';
-
-// const LOG = debug('mlog:commands:open');
+import { getConfig } from '../lib/config.js';
 
 try {
-  opn(getConfig().mlogLocation, { wait: false });
+  open(getConfig().mlogLocation, { wait: false });
 } catch (e) {
   console.log(chalk.red(e.message));
   process.exitCode = 1;

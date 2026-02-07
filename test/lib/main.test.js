@@ -1,16 +1,16 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
-import os from 'os';
-import fs from 'fs';
+import os from 'node:os';
+import fs from 'node:fs';
 import tmp from 'tmp';
-import path from 'path';
-import dateFns from 'date-fns';
+import path from 'node:path';
+import { format } from 'date-fns';
 
-import * as main from '../../src/lib/main';
+import * as main from '../../src/lib/main.js';
 
 const sandbox = sinon.createSandbox();
 
-context('lib/main', () => {
+describe('lib/main', () => {
   let tempDir = { name: path.format({ dir: process.cwd(), base: 'temp' }) };
   let homeDir = path.format({ dir: tempDir.name, base: 'home' });
   let logbookPath = path.format({ dir: tempDir.name, base: 'logbook' });
@@ -32,7 +32,7 @@ context('lib/main', () => {
         'A Category With Multiple Spaces',
       ],
       defaultCategory: 'ACategory',
-      fileNameFormat: 'YYYY-MM-DD',
+      fileNameFormat: 'yyyy-MM-dd',
       title: 'MochaTests',
     };
   });
@@ -43,7 +43,6 @@ context('lib/main', () => {
     if (fs.existsSync(logbookPath)) {
       fs.chmodSync(logbookPath, '755');
     }
-    // require('debug')('test')(`Removing ${tempDir.name}`);
     tempDir.removeCallback();
   });
 
@@ -60,7 +59,6 @@ context('lib/main', () => {
       expect(fs.statSync(result).isDirectory(), 'given path is not a directory').to.equal(true);
     });
     it('should throw an error if the directory is not writable', () => {
-      // calling once to create the path
       const categoryPath = main.getCategoryPath('ACategory');
       fs.chmodSync(categoryPath, '000');
       expect(() => main.getCategoryPath('ACategory')).to.throw();
@@ -107,7 +105,7 @@ context('lib/main', () => {
     });
     it('should use the current date if no date given', () => {
       const resultingFileName = main.importLogEntry('# New Log Entry', 'Work Log');
-      const todaysDate = dateFns.format(new Date(), global.logbookConfig.fileNameFormat);
+      const todaysDate = format(new Date(), global.logbookConfig.fileNameFormat);
       expect(path.basename(resultingFileName)).to.equal(`${todaysDate}.md`);
     });
     it('should use the default category if none given', () => {
@@ -115,15 +113,13 @@ context('lib/main', () => {
       expect(resultingFileName).to.include(global.logbookConfig.defaultCategory.replace(/ /g, '_'));
     });
     it('should fail if the file already exists and the overwrite flag is not set', () => {
-      // run once to create the file
       const resultingFileName = main.importLogEntry('# New Log Entry', 'Work Log', '2017-11-10');
-      // make sure it exists
       expect(fs.existsSync(resultingFileName), `${resultingFileName} does not exist after method call.`);
       expect(() => main.importLogEntry('# New Log Entry', 'Work Log', '2017-11-10')).to.throw();
     });
     it('should create a file with the appropriate name and location', () => {
       const resultingFileName = main.importLogEntry('# New Log Entry', 'Work Log', '2017-11-10');
-      expect(resultingFileName, 'resulting file name should not have been unset').to.be.ok; // eslint-disable-line no-unused-expressions
+      expect(resultingFileName, 'resulting file name should not have been unset').to.be.ok;
       expect(fs.existsSync(resultingFileName), `${resultingFileName} does not exist after method call.`);
     });
   });
@@ -147,7 +143,6 @@ context('lib/main', () => {
       sandbox.mock(fs).verify();
     });
     it('should write the result of the buildCategoryIndexFile function to the file', () => {
-      // create the files in the path here
       const categoryPath = main.getCategoryPath(main.getCategoryName('Work Log'));
       fs.writeFileSync(path.join(categoryPath, '2017-09-28.md'), '# Test File 1');
       fs.writeFileSync(path.join(categoryPath, '2017-09-29.md'), '# Test File 2');
@@ -166,7 +161,6 @@ context('lib/main', () => {
       fs.writeFileSync(path.join(categoryPath, '2017-09-29.md'), '# Test File 2');
       fs.writeFileSync(path.join(categoryPath, '2017-09-30.md'), '# Test File 3');
       const indexFile = main.generateCategoryIndexPage('Work Log');
-      // console.log(fs.readFileSync(indexFile, 'utf8'));
       expect(fs.readFileSync(indexFile, 'utf8')).to.not.match(/index\.md/);
     });
   });

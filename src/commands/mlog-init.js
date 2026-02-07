@@ -1,25 +1,23 @@
 #!/usr/bin/env node
 
 import debug from 'debug';
-import commander from 'commander';
+import { Command } from 'commander';
 import chalk from 'chalk';
-import { yamprint } from 'yamprint';
-import { Themes } from 'yamprint-ansi-color';
 
-import { prepareDirectory, writeHomeConfig, prepareLogbookConfig, getConfig } from '../lib/config';
-import { generateMainIndexPage } from '../lib/main';
-
-const yp = yamprint.create(Themes.regular);
+import { prepareDirectory, writeHomeConfig, prepareLogbookConfig, getConfig } from '../lib/config.js';
+import { generateMainIndexPage } from '../lib/main.js';
 
 const LOG = debug('mlog:commands:init');
 
-commander.usage('<path>')
+const program = new Command();
+
+program.usage('<path>')
   .parse(process.argv);
 
 LOG('*****\nCOMMAND INPUT:\n*****');
-LOG(commander);
+LOG(program);
 
-const logLocation = commander.args[0];
+const logLocation = program.args[0];
 
 try {
   prepareDirectory(logLocation);
@@ -27,7 +25,7 @@ try {
   prepareLogbookConfig(logLocation);
   generateMainIndexPage();
   console.log(chalk.green(`${logLocation} Initialized`));
-  process.stdout.write(yp(getConfig()));
+  process.stdout.write(JSON.stringify(getConfig(), null, 2));
   process.stdout.write('\n');
 } catch (e) {
   console.log(chalk.red(e.message));
